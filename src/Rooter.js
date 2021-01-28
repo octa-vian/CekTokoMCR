@@ -33,20 +33,15 @@ const TopTab = () => {
      tabBar={props=> <NavigationTopTab {...props}/>}>
       <Tabs.Screen name="Home" component={Splash}/>
       <Tabs.Screen name="Info" component={Info}/>
-      <Tabs.Screen name="Pesanan Siap Kirim" component={KirimPesanan}/>
-      <Tabs.Screen name="Dalam Pengiriman" component={DalamPengiriman}/>
     </Tabs.Navigator>
   )
   
 }
 
-
-
-
 function Rooter() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='Login'>
+      <Stack.Navigator initialRouteName='Top'>
         <Stack.Screen name="Login" component={Login} options={{headerShown:false}} />
         <Stack.Screen name="Home" component={Home} options={{headerShown:false}} />
         <Stack.Screen name="Navv" component={Navigation} options={{headerShown:false}} />

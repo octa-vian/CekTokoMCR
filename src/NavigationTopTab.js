@@ -41,7 +41,6 @@ const NavigationTopTab = ({ state, descriptors, navigation, position }) => {
           });
         };
 
-
         return (
           <TabIcon key={index} title={label} active={isFocused} onPress={onPress} onLongPress={onLongPress}/>
         );
