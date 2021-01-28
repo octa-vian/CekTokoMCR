@@ -13,6 +13,7 @@ import Info from './Screen/Info';
 import NavigationTopTab from './NavigationTopTab';
 import KirimPesanan from './Screen/DaftarPesanan/KirimPesanan';
 import DalamPengiriman from './Screen/DaftarPesanan/DalamPengiriman';
+import PesananSelesai from './Screen/DaftarPesanan/PesananSelesai';
 
 function HomeScreen() {
   return (
@@ -35,6 +36,7 @@ const TopTab = () => {
       <Tabs.Screen name="Info" component={Info}/>
       <Tabs.Screen name="Pesanan Siap Kirim" component={KirimPesanan}/>
       <Tabs.Screen name="Dalam Pengiriman" component={DalamPengiriman}/>
+      <Tabs.Screen name="Pesanan Siap" component={PesananSelesai}/>
     </Tabs.Navigator>
   )
   

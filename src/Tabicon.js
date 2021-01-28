@@ -1,29 +1,10 @@
 import React from 'react'
 import { Image, StyleSheet, Text, TouchableOpacity } from 'react-native'
 import { DalamPengiriman, Infored, SvgBeranda, SvgBerandaRed, SvgInfo, SvgInfoRed } from './IconSvg'
-import { IconBtn } from './MaterialIcon'
 import { colors } from './Utils'
-import { Component } from 'react'
 
 const TabIcon = ({title, active, onPress, onLongPress})  => {
 console.log(title);
-
-  // const ImgTab=()=> {
-
-  //   if(title=="Home"){
-  //     return active ? <SvgBerandaRed/> : <SvgBeranda/>
-  //   }
-  //   if(title =="Splash"){
-  //     return active ? <SvgInfoRed/> : <SvgInfo/>
-  //   }
-  //    return active ? <SvgBerandaRed/> : <SvgBeranda/>
-  // }
-
-  const img =() =>{
-
-  }
-
-  const Pbaru = () =>{<Image style={{width:20, height:20, marginTop:10, backgroundColor:'white'}} source = {require('./Gambar/pesananbaruhitam.png')}/>  }
     
 
   function Icons(){
@@ -45,6 +26,12 @@ console.log(title);
     }
 
     if(title =="Dalam Pengiriman"){
+      return active ? 
+      <Image style={{width:34, height:42, marginTop:10,}} source = {require('./Gambar/menunggumerah.png')}/> : 
+      <Image style={{width:34, height:42, marginTop:10, }} source = {require('./Gambar/menungguhitam.png')}/>
+    }
+
+    if(title =="Pesanan Siap"){
       return active ? 
       <Image style={{width:34, height:42, marginTop:10,}} source = {require('./Gambar/menunggumerah.png')}/> : 
       <Image style={{width:34, height:42, marginTop:10, }} source = {require('./Gambar/menungguhitam.png')}/>
