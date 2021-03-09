@@ -12,6 +12,7 @@ function App() {
   return (
    <View style={{flex:1}}>
      <Rooter></Rooter>
+  
    </View>
   );
 }

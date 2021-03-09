@@ -1,12 +1,29 @@
-import React from 'react'
-import { View, Text } from 'react-native'
+import React, { useEffect } from 'react'
+import { View, Text, StyleSheet } from 'react-native'
+import Navigation from '../../Navigation'
+import { colors } from '../../Utils'
 
-const PesananSelesai = () => {
+const PesananSelesai = ({navigation}) => {
+    
     return (
-        <View>
-            <Text> PesananSelesai</Text>
+        <View style={styles.page}>
+            <Navigation/>
         </View>
     )
 }
 
 export default PesananSelesai
+
+const styles = StyleSheet.create({
+    page: {
+        flex: 1,
+        alignItems:'center',
+          paddingTop:20,
+          backgroundColor:colors.bglayout
+      },
+      title: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        marginBottom:12
+      },
+})

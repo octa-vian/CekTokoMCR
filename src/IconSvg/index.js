@@ -1,9 +1,24 @@
-import SvgBeranda from './beranda.svg';
-import SvgBerandaRed from './berandared.svg';
-import SvgInfo from './icon_info.svg';
-import SvgInfoRed from './icon_info_red.svg';
-import Infored from './infored.svg';
-import Info from './info.svg';
-import DalamPengiriman from './dalampengiriman.svg';
+import SvgBeranda from './beranda.svg'
+import SvgBerandaActive from './berandared.svg'
+import SvgInfo from './info.svg'
+import SvgInfoActive from './infored.svg'
+import PesananBaru from './pesananbaru.svg'
+import PesananBaruRed from './pesananbarured.svg'
+import MenungguPesanan from './periksapesanan.svg'
+import MenungguPesananRed from './perikasapesananred.svg'
+import SiapDikirim from './menunggudikirim.svg'
+import SiapDikirimRed from './menunggupesananred.svg'
+import DalamPengiriman from './dalampengiriman.svg'
+import DalamPengirimanRed from './pengirimanpesananred.svg'
+import PesananSelesai from './selesaikanpesanan.svg'
+import PesananSelesaiRed from './selesaikanpesananred.svg'
+import IconHapus from './closeiconmerah.svg'
+import IconFilter from './filter.svg'
+import IconSearch from './searching.svg'
+import IconDaftarPesanan from './daftarpesanan.svg'
+import IconRatingToko from './ratingtoko.svg'
+import IconProdukPopuler from './produkpopuler.svg'
+import IconProfile from './ubahprofile.svg'
+import IconExit from './close.svg'
 
-export {SvgBeranda, SvgBerandaRed, SvgInfo, SvgInfoRed, Infored, Info, DalamPengiriman};
+export {SvgBeranda, SvgBerandaActive, SvgInfo, SvgInfoActive, PesananBaru, PesananBaruRed, MenungguPesanan, MenungguPesananRed, SiapDikirim, SiapDikirimRed, DalamPengiriman, DalamPengirimanRed, PesananSelesai, PesananSelesaiRed, IconHapus, IconFilter, IconSearch, IconDaftarPesanan, IconRatingToko, IconProdukPopuler, IconProfile, IconExit}

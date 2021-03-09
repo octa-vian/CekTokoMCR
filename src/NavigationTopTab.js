@@ -5,12 +5,15 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Animated from 'react-native-reanimated';
 import TabIcon from './Tabicon';
 import { colors } from './Utils';
+import Header from './Screen/Header';
 
 
 
 const NavigationTopTab = ({ state, descriptors, navigation, position }) => {
   return (
-    <View style={{ flexDirection: 'row', justifyContent:'space-around', backgroundColor:colors.bglayout, height:60 }}>
+    <View>
+      <Header title= "Daftar Pesanan" onPress={()=> navigation.goBack()}/>
+    <View style={{ flexDirection: 'row', alignItems:'center', justifyContent:'space-around', backgroundColor:colors.bglayout, height:80, paddingRight:22, paddingLeft:22, paddingTop:45, paddingBottom:20 }}>
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];
         const label =
@@ -31,8 +34,19 @@ const NavigationTopTab = ({ state, descriptors, navigation, position }) => {
 
           if (!isFocused && !event.defaultPrevented) {
             navigation.navigate(route.name);
+            navigation.reset({
+              index: 0,
+              routes: [
+                {
+                  name: route.name,
+                  params:{name:route.name}
+                }
+              ]
+            });
           }
         };
+
+        
 
         const onLongPress = () => {
           navigation.emit({
@@ -41,13 +55,12 @@ const NavigationTopTab = ({ state, descriptors, navigation, position }) => {
           });
         };
 
-
         return (
           <TabIcon key={index} title={label} active={isFocused} onPress={onPress} onLongPress={onLongPress}/>
         );
       })}
     </View>
+    </View>
   );
 }
 export default NavigationTopTab;
-
