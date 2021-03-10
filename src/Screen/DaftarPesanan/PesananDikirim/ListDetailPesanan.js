@@ -1,10 +1,11 @@
 import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
+import { colors } from '../../../Utils'
 
-const ListDetailPesanan = ({nama, satuan, harga}) => {
+const ListDetailPesanan = ({nama, satuan, harga, hargaSatuan}) => {
 
   function formatRupiah(num, pra) {
-    return pra + ' ' + parseFloat(num).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+    return pra + ' ' + parseFloat(num).toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
   }
     return (
         <View>
@@ -14,6 +15,7 @@ const ListDetailPesanan = ({nama, satuan, harga}) => {
             color:'black',
             fontWeight:'normal',
             textTransform:'capitalize'}}>{nama}</Text>
+            <Text style={{fontSize:10, color:colors.btnActif, fontStyle:'italic'}}>{formatRupiah(hargaSatuan, 'Rp')}</Text>
         </View>
         <View style={styles.tab2}>
             <Text style={{fontSize:12}}> {satuan} </Text>
@@ -37,7 +39,7 @@ const styles = StyleSheet.create({
     page2:{
       flexDirection:'row',
       justifyContent:'center',
-      width:307,
+      //width:307,
       //height:22
       paddingTop:4,
     },

@@ -2,7 +2,11 @@ import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { colors } from '../../../Utils'
 
-const ListDetailPesanan1 = ({nama, satuan, status}) => {
+const ListDetailPesanan1 = ({nama, satuan, status, hargaSatuan}) => {
+
+  function formatRupiah(num, pra) {
+    return pra + ' ' + parseFloat(num).toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+  }
     return (
         <View>
         <View style={styles.page2}>
@@ -10,7 +14,8 @@ const ListDetailPesanan1 = ({nama, satuan, status}) => {
             <Text style={{fontSize:12, 
               color:'black',
               fontWeight:'normal',
-              textTransform:'capitalize'}} numberOfLines={1}>{nama}</Text>
+              textTransform:'capitalize'}}>{nama}</Text>
+              <Text style={{fontSize:10, color:colors.btnActif, fontStyle:'italic'}}>{formatRupiah(hargaSatuan, 'Rp')}</Text>
         </View>
         <View style={styles.tab2}>
             <Text style={{fontSize:12}}> {satuan} </Text>
@@ -35,7 +40,7 @@ const styles = StyleSheet.create({
     page2:{
       flexDirection:'row',
       justifyContent:'center',
-      width:307,
+      //width:307,
       paddingTop:4
 
       

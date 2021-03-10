@@ -15,6 +15,7 @@ import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-
 import CircleCheckBox, {LABEL_POSITION} from 'react-native-circle-checkbox';  
 import LoadingSuksesTransaksi from '../Loading/LoadingSuksesTransaksi';
 
+
 const HomeScreen = ({navigation}) => {
 
     const [session, setSession] = useState(null);
@@ -49,6 +50,8 @@ const HomeScreen = ({navigation}) => {
     const [valueKirim, setValueKirim] = useState('');
     const [statusMet, setStatusMet] = useState('');
     const [valueMetodBelanja, setValueMetodBelanja] = useState('');
+    const [checkMetodBelanja, setMetodBelanja] = useState(false);
+    const [statusMetodBelanja, setStatusMetodBelanja] = useState('');
 
     const [RToko, setRtoko] = useState(0);
     const [LoadingSukses, setSukses] = useState(false);
@@ -99,17 +102,28 @@ const HomeScreen = ({navigation}) => {
                 setPesan(metadata.message);
                 setRating(resRating);
 
-                if(data.status_merchant === '0'){
+                if(data.is_pickup === '1') {
+                  setMetodBelanja(true);
+                  setStatusMetodBelanja('Ambil Sendiri');
+                } else {
+                  setMetodBelanja(false);
+                  setStatusMetodBelanja('');
+                  
+                }
+ 
+                if(data.is_sent === '1'){
+                  setValueKirim('Dikirim');
+                  setCekTerkirim(true);
+                } else{
+                  setValueKirim('');
+                  setCekTerkirim(false);
+                } 
+
+                if(data.status_merchant === '1'){
                   setStatusToko('Buka'); 
                 } else {
                   setStatusToko('Tutup'); 
                 }
-
-                if(data.is_sent === '1'){
-                  setValueKirim('Dikirim');
-                } else{
-                  setValueKirim('');
-                } 
                 
             } else{
                 setLoading(true);
@@ -122,7 +136,7 @@ const HomeScreen = ({navigation}) => {
       }
 
       const TerapkanStatus = (value) => {
-        if(value === 1){
+        if(value == 1){
           getStatusToko();
         } else{
           getStatusToko();
@@ -143,6 +157,7 @@ const HomeScreen = ({navigation}) => {
           } else {
             setPesanStatus(metadata.message);
             setSukses(true);
+            getData();
           }
         })
       }
@@ -163,6 +178,7 @@ const HomeScreen = ({navigation}) => {
           if(metadata.status === 200){
             getData();
             alert(metadata.message);
+            setVisible(false);
           }else {
             getData();
             alert(metadata.message);
@@ -171,15 +187,33 @@ const HomeScreen = ({navigation}) => {
       }
 
       const TerapkanMetodeBelanja = (value) => {
+
+        if(value == true){
+          setValueMetodBelanja('1');
+          setMetodBelanja(true);
+          
+        } else {
+          setValueMetodBelanja('0');
+          setMetodBelanja(false);
+        }
+        
+      }
+
+      const TerapkanStatusKirim = (value) => {
+
         console.log('test: ', value);
-        if(value === true){
-          setStatusMet('0');
-          setCekTerkirim(true);
-          alert(statusMet);
-        } else{
+        if(value == true){
           setStatusMet('1');
+          setCekTerkirim(true);
+        } else{
+          setStatusMet('0');
           setCekTerkirim(false);
         }
+
+      }
+
+      const Terapkan = () => {
+        getMetodeBelanja();
       }
 
       const showPopUp = () => {
@@ -200,6 +234,7 @@ const HomeScreen = ({navigation}) => {
         //loadSession();
         //setLoadImg(true);
         getData();
+        
      }, []);
 
 
@@ -215,19 +250,19 @@ const HomeScreen = ({navigation}) => {
                     <Text style={{fontSize:12, color:'white', marginTop:2}} numberOfLines={2}>{data.alamat_merchant}</Text>
                     <View style={{borderBottomColor: '#FFFFFF',borderBottomWidth: 1, marginVertical:10 }}>
                     </View>
-                    <View style={{flex:0.5, flexDirection:'row',}}>
+                    <View style={{flexDirection:'row',}}>
                         <Text style={{flex:1, fontSize:12, color:'white'}}>Rating kelengkapan produk</Text>
                         <Image source={require('../Gambar/starkuning.png')} style={{height:10, width:10, marginRight:2}}/>
                         <Text style={{justifyContent:'center', alignItems:'center', color:'white', fontSize:10}}>{rating.rate_barang}/5</Text>
                         
                     </View>
-                    <View style={{flex:0.5, flexDirection:'row'}}>
+                    <View style={{flexDirection:'row'}}>
                         <Text style={{flex:1, fontSize:12, color:'white'}}>Rating Harga</Text>
                         <Image source={require('../Gambar/starkuning.png')} style={{height:10, width:10, marginRight:2}}/>
                         <Text style={{justifyContent:'center', alignItems:'center', color:'white', fontSize:10}}>{rating.rate_harga}/5</Text>
                         
                     </View>
-                    <View style={{flex:1, flexDirection:'row',}}>
+                    <View style={{flex:0.5, flexDirection:'row',}}>
                         <Text style={{flex:1, color:'white', fontSize:12}}>Rating Pelayanan</Text>
                         <Image source={require('../Gambar/starkuning.png')} style={{height:10, width:10, marginRight:2}}/>
                         <Text style={{justifyContent:'center', alignItems:'center', color:'white', fontSize:10}}>{rating.rate_pelayanan}/5</Text>
@@ -267,7 +302,7 @@ const HomeScreen = ({navigation}) => {
                     <IconStatusBelanja/>
                     <View style={{flex:1}}>
                       <Text style={{fontSize:12, color:'white'}}> Metode Belanja</Text>
-                      <Text style={{fontWeight:'bold', fontSize:14, color:'white'}}>{valueKirim}/</Text>
+                      <Text style={{fontWeight:'bold', fontSize:14, color:'white'}}>{valueKirim}/{statusMetodBelanja}</Text>
                     </View>
                   </View>
 
@@ -349,7 +384,7 @@ const HomeScreen = ({navigation}) => {
                 <View style={{flex:1, justifyContent:'center', alignItems:'center'}}>
                 <View
                 style={{
-                height: 350,
+                height: 370,
                 width:320,
                 position:'absolute',
                 backgroundColor: 'white',
@@ -386,29 +421,29 @@ const HomeScreen = ({navigation}) => {
                     <Text style={{marginLeft:24, marginTop:34, fontSize:14, fontWeight:'bold'}}> Metode Belanja </Text>
                     <View style={{marginLeft:24, marginTop:12, }}>
 
-                    <View style={{marginBottom:10}}>
+                    <View style={{marginBottom:10,}}>
 
                     <CircleCheckBox
                       checked={checkTerkirim}
-                      onToggle={(checked) => TerapkanMetodeBelanja(checked)}
+                      onToggle={(checked) => TerapkanStatusKirim(checked)}
                       labelPosition={LABEL_POSITION.RIGHT}
                       label="Dikirim"/>
                     </View>
 
 
                     <CircleCheckBox
-                      checked={true}
-                      onToggle={(checked) => console.log('My state is: ', checked)}
+                      checked={checkMetodBelanja}
+                      onToggle={(checked) => TerapkanMetodeBelanja(checked)}
                       labelPosition={LABEL_POSITION.RIGHT}
                       label="Ambil di Toko"/>
                     
                     </View>
 
-                    {/* <View style={{alignItems:'center', justifyContent:'center', marginTop:15}}>
-                      <TouchableOpacity style={{width:120, height:38, backgroundColor:colors.btnActif, borderRadius:8, alignItems:'center', justifyContent:'center'}} onPress={showPopUp}>
+                    <View style={{alignItems:'center', justifyContent:'center', marginTop:15}}>
+                      <TouchableOpacity style={{width:120, height:38, backgroundColor:colors.btnActif, borderRadius:8, alignItems:'center', justifyContent:'center'}} onPress={Terapkan}>
                         <Text style={{fontSize:14, color:'white'}}> Terapkan </Text>
                       </TouchableOpacity>
-                    </View> */}
+                    </View>
 
                   </View>
                 </View>

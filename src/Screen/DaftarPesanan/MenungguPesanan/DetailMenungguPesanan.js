@@ -57,6 +57,7 @@ const DetailMenungguPesanan = ({ route, navigation}) => {
             <ListDetailPesanan1 
             nama={item.nama_product} 
             satuan={item.qty + "" + item.satuan} 
+            hargaSatuan={item.harga}
             status={item.keterangan}>
             </ListDetailPesanan1>
         )
@@ -118,7 +119,7 @@ const DetailMenungguPesanan = ({ route, navigation}) => {
             <Text style={{fontSize:14, marginTop:14, marginLeft:24, fontWeight:'bold', color:'#EB2843'}}> 
             Pesanan Baru 
             </Text>
-            <View style={{  width:307, marginLeft:13, marginRight:13, marginTop:20}}>
+            <View style={{ marginLeft:13, marginRight:13, marginTop:20}}>
             <FlatList
                 data={dataProduk}
                 renderItem={renderItem}
@@ -154,7 +155,7 @@ const DetailMenungguPesanan = ({ route, navigation}) => {
             <Text style={{fontSize:14, marginTop:14, marginLeft:24, fontWeight:'bold', color:'white', fontWeight:'bold'}}> 
             Produk Rekomendasi Penjual 
             </Text>
-            <View style={{  width:307, marginLeft:13, marginRight:13, marginTop:18, marginBottom:10}}>
+            <View style={{ marginLeft:13, marginRight:13, marginTop:18, marginBottom:10}}>
             <FlatList
                 data={dataRecomend}
                 renderItem={renderItemRecomend}
@@ -225,9 +226,9 @@ const styles = StyleSheet.create({
         
     },
     txt2:{
-        marginLeft:24,
+        marginRight:24,
         flex:1,
-        alignItems:'center'
+        alignItems:'flex-end'
     },
     btn1:{
         alignItems:'center',
@@ -245,7 +246,7 @@ const styles = StyleSheet.create({
             width: 0,
             height: 2,
         },
-        width:329,
+        width:360,
         justifyContent:'center',
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
@@ -266,7 +267,7 @@ const styles = StyleSheet.create({
             width: 0,
             height: 2,
         },
-        width:329,
+        width:345,
         justifyContent:'center',
         shadowOpacity: 0.25,
         shadowRadius: 3.84,

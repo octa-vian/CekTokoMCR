@@ -2,7 +2,12 @@ import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { colors } from '../../../Utils'
 
-const ListPreviewStruk = ({nama, satuan, status}) => {
+const ListPreviewStruk = ({nama, satuan, status, harga, hargaSatuan}) => {
+
+  function formatRupiah(num, pra) {
+    return pra + ' ' + parseFloat(num).toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+    }
+
     return (
     
         <View>
@@ -12,12 +17,16 @@ const ListPreviewStruk = ({nama, satuan, status}) => {
               color:'black',
               fontWeight:'normal',
               textTransform:'capitalize'}} >{nama}</Text>
+              <Text style={{fontSize:12, color:colors.btnActif, fontStyle:'italic'}}>{formatRupiah(hargaSatuan, 'Rp')}</Text>
         </View>
         <View style={styles.tab2}>
             <Text style={{fontSize:12, }} > {satuan} </Text>
         </View>
         <View style={styles.tab3}>
             <Text style={{fontSize:12, color:colors.btnredcolor, textTransform:'capitalize'}}>{status}</Text>
+        </View>
+        <View style={styles.tab4}>
+            <Text style={{fontSize:12, color:'black', textTransform:'capitalize'}}>{formatRupiah(harga, 'Rp')}</Text>
         </View>
         </View>
         </View>
@@ -37,7 +46,7 @@ const styles = StyleSheet.create({
     page2:{
       flexDirection:'row',
       justifyContent:'center',
-      width:307,
+      //width:307,
       paddingTop:4
       //height:22
     },
@@ -73,7 +82,12 @@ const styles = StyleSheet.create({
       alignItems:'center'
   },
   tab3:{
-      flex:1,
-      alignItems:'flex-start'
+    flex:1,
+    alignItems:'flex-start'
+  },
+  tab4:{
+    flex:1,
+    alignItems:'flex-end',
+    marginRight:14
   }
   });

@@ -13,7 +13,7 @@ const DetailPesananDikirim = ({ route, navigation}) => {
         no_order:IdOrder
     }
     function formatRupiah(num, pra) {
-        return pra + ' ' + parseFloat(num).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+        return pra + ' ' + parseFloat(num).toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
     }
     const [Produk, setProduk] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -77,6 +77,7 @@ const DetailPesananDikirim = ({ route, navigation}) => {
             <ListDetailPesanan 
             nama={item.nama_product} 
             satuan={item.qty +" "+ item.satuan} 
+            hargaSatuan={item.harga}
             harga={item.harga}>
             </ListDetailPesanan>
         )
@@ -129,7 +130,7 @@ const DetailPesananDikirim = ({ route, navigation}) => {
             <Text style={{fontSize:14, marginTop:14, marginLeft:24, fontWeight:'bold', color:'#EB2843'}}> 
             Pesanan Baru 
             </Text>
-            <View style={{  width:307, marginLeft:13, marginRight:13, marginTop:20}}>
+            <View style={{ marginLeft:13, marginRight:13, marginTop:20}}>
             <FlatList
                 data={Produk}
                 renderItem={renderItem}
@@ -230,9 +231,9 @@ const styles = StyleSheet.create({
         
     },
     txt2:{
-        marginLeft:24,
+        marginRight:24,
         flex:1,
-        alignItems:'center'
+        alignItems:'flex-end'
     },
     btn1:{
         alignItems:'center',
@@ -250,7 +251,7 @@ const styles = StyleSheet.create({
             width: 0,
             height: 2,
         },
-        width:329,
+        width:360,
         justifyContent:'center',
         shadowOpacity: 0.25,
         shadowRadius: 3.84,

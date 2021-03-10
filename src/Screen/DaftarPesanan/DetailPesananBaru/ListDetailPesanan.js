@@ -2,10 +2,10 @@ import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { colors } from '../../../Utils'
 
-const ListDetailPesanan = ({nama, satuan, harga}) => {
+const ListDetailPesanan = ({nama, satuan, harga, hargaSatuan}) => {
 
   function formatRupiah(num, pra) {
-    return pra + ' ' + parseFloat(num).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+    return pra + ' ' + parseFloat(num).toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
     }
     return (
         <View>
@@ -16,12 +16,16 @@ const ListDetailPesanan = ({nama, satuan, harga}) => {
               color:'black',
               fontWeight:'normal',
               textTransform:'capitalize'}}>{nama}</Text>
+              <Text style={{fontSize:12, color:colors.btnActif, fontWeight:'800', fontStyle:'italic'}}>{formatRupiah(hargaSatuan, 'Rp')}</Text>
         </View>
         <View style={styles.tab2}>
-            <Text style={{fontSize:12, }} > {satuan} </Text>
+            <Text style={{fontSize:12, fontWeight:'900'}}> {satuan} </Text>
         </View>
-        <View style={styles.tab3}>
-            <Text style={{fontSize:12, color:'black', fontWeight:'800'}}>{formatRupiah(harga, 'Rp')}</Text>
+        {/* <View style={styles.tab3}>
+            <Text style={{fontSize:12, color:'black', fontWeight:'800'}}>{formatRupiah(hargaSatuan, 'Rp')}</Text>
+        </View> */}
+        <View style={styles.tab4}>
+            <Text style={{fontSize:12, color:'black', }}>{formatRupiah(harga, 'Rp')}</Text>
         </View>
         </View>
         </View>
@@ -40,7 +44,7 @@ const styles = StyleSheet.create({
     page2:{
       flexDirection:'row',
       justifyContent:'center',
-      width:307,
+      //width:307,
       paddingTop:4
      
     },
@@ -66,7 +70,7 @@ const styles = StyleSheet.create({
       height: 30,
     },
     tab1:{
-        flex:1,
+        flex:1.3,
         marginLeft:10
         //alignItems:'center'
     },
@@ -75,6 +79,11 @@ const styles = StyleSheet.create({
         alignItems:'center'
     },
     tab3:{
+      flex:1,
+      alignItems:'flex-end',
+      marginRight:14
+    },
+    tab4:{
         flex:1,
         alignItems:'flex-end',
         marginRight:14

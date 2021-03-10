@@ -39,6 +39,8 @@ const PreviewStruk = ({route, navigation}) => {
             <ListPreviewStruk 
             nama={item.nama_product} 
             satuan={item.qty +" "+item.satuan}  
+            harga={item.total}
+            hargaSatuan={item.harga}
             status={item.keterangan}>
             </ListPreviewStruk>        
         );
@@ -89,7 +91,7 @@ const PreviewStruk = ({route, navigation}) => {
             <Text style={{fontSize:14, marginTop:14, marginLeft:24, fontWeight:'bold', color:'black'}}> 
             Struk yang akan dikonfirmasi Pembeli 
             </Text>
-            <View style={{  width:307, marginLeft:13, marginRight:13, marginTop:20}}>
+            <View style={{ marginLeft:13, marginRight:13, marginTop:20}}>
             <FlatList
                 data={data}
                 renderItem={renderItem}
@@ -124,7 +126,7 @@ const PreviewStruk = ({route, navigation}) => {
             <Text style={{fontSize:14, marginTop:12, marginLeft:24, fontWeight:'bold', color:'white', fontWeight:'bold'}}> 
             Produk Rekomendasi Penjual 
             </Text>
-            <View style={{  width:307, marginLeft:13, marginRight:13, marginTop:18, marginBottom:10}}>
+            <View style={{ marginLeft:13, marginRight:13, marginTop:18, marginBottom:10}}>
             <FlatList
                 data={dataRec}
                 renderItem={renderItemRec}
@@ -239,7 +241,7 @@ const styles = StyleSheet.create({
             width: 0,
             height: 2,
         },
-        width:329,
+        width:380,
         justifyContent:'center',
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
@@ -260,7 +262,7 @@ const styles = StyleSheet.create({
             width: 0,
             height: 2,
         },
-        width:329,
+        width:350,
         justifyContent:'center',
         shadowOpacity: 0.25,
         shadowRadius: 3.84,

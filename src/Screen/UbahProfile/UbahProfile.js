@@ -2,7 +2,7 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { View, Text, ScrollView, ImageBackground, StyleSheet, Image, TouchableOpacity, ToastAndroid, Platform, Alert, Modal, ActivityIndicator, Dimensions, Animated, TextInput } from 'react-native'
 import Api from '../../Api'
-import { GambarKamera, Notif, RatingToko, Stars, Str } from '../../imgSvg'
+import { GambarKamera, Notif, RatingToko, ShopeNew, Stars, Str } from '../../imgSvg'
 import { colors } from '../../Utils'
 import Header from '../Header'
 import ProgressDialog from 'react-native-progress-dialog';
@@ -15,6 +15,9 @@ import moment from 'moment';
 import RNPickerSelect from 'react-native-picker-select'
 import LoadingSukses from '../../Loading/LoadingSukses'
 import LoadingSuksesTransaksi from '../../Loading/LoadingSuksesTransaksi'
+import {launchImageLibrary} from 'react-native-image-picker';
+import { IconExit } from '../../IconSvg'
+import LoadingFaildProsses from '../../Loading/LoadingFaildProsses'
 const { width, height } = Dimensions.get('window');
 
 const UbahProfile = ({navigation}) => {
@@ -47,9 +50,13 @@ const UbahProfile = ({navigation}) => {
     const [showTime1, setShowTime1] = useState(false);
     const [jBuka, setJbuka] = useState();
     const [jTutup, setJtutup] = useState();
+    const [visible, setVisible] = useState(false);
 
     const [sukses, setSukses] = useState(false);
     const [jmBuka, setjmbuka] = useState();
+
+    const [imgProfile, setImgProfile] = useState(null);
+    const [showError, setError] = useState(false);
 
 
     const [dataProfile, setProfile] = useState({
@@ -79,6 +86,8 @@ const UbahProfile = ({navigation}) => {
         jam_buka:jamBuka,
         jam_tutup:jamTutup,
     }
+
+    var imageName = '', imageFile = '';
 
     console.log('set: ', param);
 
@@ -119,6 +128,10 @@ const UbahProfile = ({navigation}) => {
       const showTimepicker1 = () => {
         showMode1('time');
       };
+
+      const setShowUploadImg = () => {
+          setVisible(!visible);
+      }
 
     const [animatePress, setAnimatePress] = useState(new Animated.Value(1))
 
@@ -348,6 +361,74 @@ const UbahProfile = ({navigation}) => {
         setImageLoading(true);
       }, []);
 
+    const viSibleError = () => {
+        setError(!showError);
+    }
+
+    const visibleSukses = () => {
+        setSukses(!sukses);
+    }
+
+
+      const getImage = () => {
+
+        const options = {quality: 0.8, maxWidth: 720, maxHeight: 720}
+        launchImageLibrary(options, (response) => {
+            console.log('image data', response);
+            if(response.didCancel || response.error){
+
+                alert('Silahkan pilih gambar terlebih dahulu');
+            } else {
+
+                imageName = response.fileName
+                imageFile = response; 
+                setImgProfile(response);
+                onContinueFile();
+
+            }
+        })
+    }
+
+    const onContinueFile = async () => {
+        //const formData = createFormData(posterFile);
+        const data = new FormData();
+        data.append('files', {
+            name: imageName,
+            type:"image/jpeg",
+            uri: Platform.OS === 'android' ? imageFile.uri : imageFile.uri.replace('file://', '') 
+        });
+        data.append('filename',imageName);
+        data.append('name','files');
+
+        console.log('data request', data);
+        Api.post('profile/update_foto_merchant', data, 
+        {
+            headers: {
+                'Content-Type':'application/x-www-form-urlencoded'
+            }
+
+        })
+        .then((response) => {
+            const metadata = response.data.metadata;
+            const respon = response.data.response;
+
+            if(metadata.status == 200){
+  
+                //setUploadImgProfile(respon.nama_profil);
+                //setUploadFolderProfile(respon.folder_profil);
+                setPesan(metadata.message);
+                setSukses(true);                    
+    
+            }else{
+                setPesan(metadata.message);
+                setError(true);
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+        })
+    }
+
 
 
     return (
@@ -384,7 +465,7 @@ const UbahProfile = ({navigation}) => {
                     elevation: 7,
                     overflow: 'visible',}}>
 
-                    <TouchableOpacity style={styles.btnProfile} onPress={() => alert('haii')}>
+                    <TouchableOpacity style={styles.btnProfile} onPress={getImage}>
                        <GambarKamera height={30} width={30} />
                     </TouchableOpacity>
                     
@@ -396,15 +477,15 @@ const UbahProfile = ({navigation}) => {
                         <View style={{marginLeft:20, marginRight:20}}>
                         <View style={{flexDirection:'row'}}>
                         <Text style={{marginTop:20, fontSize:14, fontWeight:'bold', flex:1}}> Nama Merchant </Text>
-                        <Text style={{marginTop:20, fontSize:14, textTransform:'uppercase', flex:1 }} numberOfLines={2}> {dataProfile.nama_merchant} </Text>
+                        <Text style={{marginTop:20, fontSize:14, textTransform:'uppercase', flex:1, }} numberOfLines={2}> {dataProfile.nama_merchant} </Text>
                         </View>
                         <View style={{flexDirection:'row'}}>
-                        <Text style={{marginTop:20, fontSize:14, fontWeight:'bold', flex:1}}> No Hp Merchant </Text>
-                        <Text style={{marginTop:20, fontSize:14, flex:1 }} numberOfLines={2}> {dataProfile.no_hp_merchant} </Text>
+                        <Text style={{marginTop:20, fontSize:14, fontWeight:'bold', flex:1}}> No Hp Merchant </Text> 
+                        <Text style={{marginTop:20, fontSize:14, flex:1, }} numberOfLines={2}> {dataProfile.no_hp_merchant} </Text>
                         </View>
                         <View style={{flexDirection:'row'}}>
                         <Text style={{marginTop:20, fontSize:14, fontWeight:'bold', flex:1}}> Alamat Merchant </Text>
-                        <Text style={{marginTop:20, fontSize:14, textTransform:'capitalize', flex:1 }} numberOfLines={2} > {dataProfile.alamat_merchant} </Text>
+                        <Text style={{marginTop:20, fontSize:14, textTransform:'capitalize', flex:1 }}>{dataProfile.alamat_merchant} </Text>
                         </View>
                         <View style={{flexDirection:'row'}}>
                         <Text style={{marginTop:20, fontSize:14, fontWeight:'bold', flex:1}}> Kelurahan </Text>
@@ -428,11 +509,11 @@ const UbahProfile = ({navigation}) => {
                     <View style={{borderBottomColor: '#D4DFE6',borderBottomWidth: 2, marginVertical:10, marginLeft:23, marginRight:23, marginTop:28, marginBottom:28 }}>
                     </View>
 
-                    <Text style={{marginLeft:20, marginRight:20,  fontSize:16, fontWeight:'bold'}}> Jam Oprasional </Text>
+                    <Text style={{marginLeft:20, marginRight:20, fontSize:16, fontWeight:'bold'}}> Jam Oprasional </Text>
                     <View style={{flexDirection:'row', marginBottom:30}}>
                     <View style={{marginLeft:20, flex:1}}>
-                            <Text style={{marginTop:20, fontSize:14, fontWeight:'bold'}}> Jam Buka </Text>
-                            <Text style={{marginTop:20, fontSize:14, fontWeight:'bold'}}> Jam Tutup </Text>
+                        <Text style={{marginTop:20, fontSize:14, fontWeight:'bold'}}> Jam Buka </Text>
+                        <Text style={{marginTop:20, fontSize:14, fontWeight:'bold'}}> Jam Tutup </Text>
                     </View>
 
                     <View style={{flex:1}}>
@@ -440,17 +521,18 @@ const UbahProfile = ({navigation}) => {
                         <Text style={{marginTop:20, fontSize:14, }}>{dataProfile.jam_tutup}</Text>
                     </View>
                     </View>
+
                 </ImageBackground>
                 <LoadingImage visible ={loadingImage} />
                 <LoadingMessage visible={loading} pesan={pesan} />
                 <ButtonList onPress={() => confirmLogout()} visible={getPopup} back={toggleModal}/>
             </ScrollView>
 
-            <View style={styles.borderBtn}>
-                <TouchableOpacity style={styles.BtnUbahProfile} onPress={showUpdateProfile}>
-                    <Text style={{fontSize:16, color:'white', fontWeight:'bold', textTransform:'uppercase'}}> Ubah Profile </Text>
-                </TouchableOpacity>
-            </View>
+        {/* <View style={styles.borderBtn}>
+            <TouchableOpacity style={styles.BtnUbahProfile} onPress={showUpdateProfile}>
+                <Text style={{fontSize:16, color:'white', fontWeight:'bold', textTransform:'uppercase'}}> Ubah Profile </Text>
+            </TouchableOpacity>
+        </View> */}
         
         {/* <SlidingPanel
             headerLayoutHeight = {48}
@@ -510,7 +592,6 @@ const UbahProfile = ({navigation}) => {
             onValueChange={(value) => {
                 setIdProvensi(value);
                 getKota(value);
-
             }}
             value={provinsi.length > 0 ? idProvensi: false}
             placeholder={{
@@ -738,6 +819,48 @@ const UbahProfile = ({navigation}) => {
       )}      
 
       <LoadingSuksesTransaksi visible={sukses} pesan={pesan} onPress={() => setSukses(false)}/>
+
+      <Modal
+            animationType="slide" transparent={true}
+            visible={visible}>
+                <View style={{flex:1, justifyContent:'center', alignItems:'center'}}>
+                <View
+                style={{
+                height: 370,
+                width:320,
+                position:'absolute',
+                backgroundColor: 'white',
+                borderRadius:20,
+                shadowColor: "#000",
+                shadowOffset: {
+                    width: 0,
+                    height: 6,
+                },
+                shadowOpacity: 0.37,
+                shadowRadius: 7.49,
+                elevation: 12, }}>
+
+                  <View style={{flex:1}}>
+
+                     <View style={{alignItems:'flex-end', justifyContent:'center', marginTop:10, marginRight:10}}>
+                      <TouchableOpacity style={{width:38, height:38, backgroundColor:colors.btnActif, borderRadius:100, alignItems:'center', justifyContent:'center'}} onPress={setShowUploadImg}>
+                        <IconExit/>
+                      </TouchableOpacity>
+                    </View>
+
+                    <View style={{alignItems:'center', justifyContent:'center', marginTop:15}}>
+                      <TouchableOpacity style={{width:120, height:38, backgroundColor:colors.btnActif, borderRadius:8, alignItems:'center', justifyContent:'center'}} onPress={setImageLoading}>
+                        <Text style={{fontSize:14, color:'white'}}> Terapkan </Text>
+                      </TouchableOpacity>
+                    </View>
+
+                  </View>
+                </View>
+                </View>    
+        </Modal>
+
+        <LoadingFaildProsses visible={showError} pesan={pesan} onPress={viSibleError}/>
+        <LoadingSuksesTransaksi visible={sukses} pesan={pesan} onPress={visibleSukses} />
         
         </View>
     )

@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     page2:{
       flexDirection:'row',
       justifyContent:'center',
-      width:307,
+      //width:307,
       paddingTop:14
       
     },

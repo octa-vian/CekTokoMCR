@@ -74,6 +74,7 @@ const DetailPesanan = ({route, navigation}) => {
             key={item.id}
             nama={item.nama_produk} 
             satuan={item.qty + ' '+item.satuan} 
+            hargaSatuan={item.harga}
             harga={item.harga}>
             </ListDetailPesanan>
         );
@@ -155,7 +156,7 @@ const DetailPesanan = ({route, navigation}) => {
             <Text style={{fontSize:14, marginTop:14, marginLeft:24, fontWeight:'bold', color:'#EB2843'}}> 
             Pesanan Baru 
             </Text>
-            <View style={{  width:307, marginLeft:13, marginRight:13, marginTop:20}}>
+            <View style={{  marginLeft:13, marginRight:13, marginTop:20}}>
             <FlatList
                 data={dataProduk}
                 renderItem={renderItem}
@@ -313,7 +314,7 @@ const styles = StyleSheet.create({
             width: 0,
             height: 2,
         },
-        width:329,
+        width:400,
         justifyContent:'center',
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
