@@ -1,0 +1,106 @@
+{
+  "project_info": {
+    "project_number": "641376931164",
+    "project_id": "cektoko-9ffa9",
+    "storage_bucket": "cektoko-9ffa9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:641376931164:android:4e5877642bc0bab75b8599",
+        "android_client_info": {
+          "package_name": "com.merchanttoko"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "641376931164-4sm1j7dsf321lg2p1m3t56ooh1tcku35.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.merchanttoko",
+            "certificate_hash": "69a7bd24367f8d1603cc7d6194fe5f30ecf77ef3"
+          }
+        },
+        {
+          "client_id": "641376931164-qj5hmo6tnbr6osgo3pmkr8alv8p59rh4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwLvMQ2eMmsOQM8a4Na5BEz4vrgeplhF0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "641376931164-qj5hmo6tnbr6osgo3pmkr8alv8p59rh4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "641376931164-48dhp50cu9d0u4goj3dc8mhtc4ompq7f.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "id.net.gmedia.cektokousera"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:641376931164:android:2746cc20e8d31b225b8599",
+        "android_client_info": {
+          "package_name": "id.net.gmedia.cektokouser"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "641376931164-4hkjdthcvlh2hm09aftr8d4353bigah1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "id.net.gmedia.cektokouser",
+            "certificate_hash": "e1b8bdeacd41b5718a1effa3a042143bd1ec02fc"
+          }
+        },
+        {
+          "client_id": "641376931164-mgtj83rtt0gl619ds5os6ltfjalrlgn5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "id.net.gmedia.cektokouser",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "641376931164-qj5hmo6tnbr6osgo3pmkr8alv8p59rh4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwLvMQ2eMmsOQM8a4Na5BEz4vrgeplhF0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "641376931164-qj5hmo6tnbr6osgo3pmkr8alv8p59rh4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "641376931164-48dhp50cu9d0u4goj3dc8mhtc4ompq7f.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "id.net.gmedia.cektokousera"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
