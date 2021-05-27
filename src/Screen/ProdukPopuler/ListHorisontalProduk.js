@@ -5,9 +5,9 @@ import { colors } from '../../Utils'
 const ListHorisontalProduk = ({gambar}) => {
     return (
         <View style={{flex:1}}>
-            <View style={styles.stylImage}>
-                <Image style={{height:250, width:400}} source={{uri: gambar}} />
-                </View>
+        <View style={styles.stylImage}>
+        <Image style={{height:250, width:400}} source={{uri: gambar}} />
+        </View>
         </View>
     )
 }

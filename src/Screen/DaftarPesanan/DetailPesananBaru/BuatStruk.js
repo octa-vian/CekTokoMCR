@@ -10,15 +10,22 @@ import Header from '../../Header'
 import ListBuatStruk from './ListBuatStruk'
 import RNPickerSelect from 'react-native-picker-select'
 import LoadingSuksesTransaksi from '../../../Loading/LoadingSuksesTransaksi'
+import SwipeablePanel from 'react-native-sheets-bottom';
+import CustomBottomSheet from 'react-native-custom-bottom-sheet';
+import Toast, { BaseToast } from 'react-native-toast-message';
 
+
+var token = '';
+var Trecomend = 0;
 
 const BuatStruk = ({route, navigation}) => {
 
-    const [token, setToken] = useState(makeid(22));
     const {IdOrder} = route.params;
+    const {Tips} = route.params;
+    const {Biaya_apl} = route.params;
     const [produk, setProduk] = useState([]);
     const [produkRecomend, setRecomendProduk] = useState([]);
-    const [tampil, setTampil] = useState(true);
+    const [tampil, setTampil] = useState(false);
     const [visible, setVisible] = useState(false);
     const [name, setname] = useState();
     const [viewRecomend, setView] = useState(false);
@@ -45,6 +52,12 @@ const BuatStruk = ({route, navigation}) => {
     const [qtyM, setQtyM] = useState(0);
     const [hargaM, setHargaM] = useState(0);
     const [varianM, setVarianM] = useState('');
+    const [showPannel, setViewPannel] = useState(false);
+    const [showBtn, setShowBtn] = useState(true);
+    const [showPanelRecomend, setViewPanelRec] = useState(false);
+    const {Kunai, Token} = route.params;
+    const [TotRec, setTotRec] = useState(0);
+    //console.log('rote: ', Kunai);
 
     const [subTotal, setSubTotal] = useState(0);
 
@@ -61,19 +74,14 @@ const BuatStruk = ({route, navigation}) => {
             }
         })
         setSubTotal(currentSubtotal + totalRec);
-        console.log('sub:', currentSubtotal);
+        //console.log('sub:', currentSubtotal);
         }
 
     function formatRupiah(num, pra) {
-    return pra + ' ' + parseFloat(num).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+    return pra + ' ' + parseFloat(num).toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
     }
 
     
-
-    const param = {
-        no_order:IdOrder,
-        token:token
-    }
     const paramHapus = {
         id:IDHapus,
         token:token
@@ -81,7 +89,7 @@ const BuatStruk = ({route, navigation}) => {
     const paramHapusRecomen = {
         id:hapusRecomend
     }
-    console.log('token: ', token);
+    //console.log('token: ', token);
 
     const paramTambahRec = {
         no_order:IdOrder,
@@ -108,13 +116,18 @@ const BuatStruk = ({route, navigation}) => {
         
     }
 
-    console.log('parameter: ', paramTambahRec);
+    //console.log('parameter: ', paramTambahRec);
 
     useEffect(() => {
-        console.log('no 1', token);
+
+        if(Token != null){
+            token = Token;
+        }else{
+            token = makeid(22);
+        }
         getData();
-        setTampil(!tampil);
         hitungSubtotal();
+        console.log('no 1', token);
     },[]);
 
     useEffect(() =>{
@@ -122,6 +135,11 @@ const BuatStruk = ({route, navigation}) => {
             hitungSubtotal();
         })
     })
+
+    // if(Kunai === 1){
+    //     getData();
+    //     setTampil(true);
+    // }
 
     const kondisi = (flag) => {
         
@@ -146,18 +164,39 @@ const BuatStruk = ({route, navigation}) => {
       }
 
       const getData = () => {
-          console.log(param);
+        const param = {
+            no_order:IdOrder,
+            token:token
+        }
+          //console.log(param);
           Api.post('transaksi/daftar_struk_produk', param)
           .then(async (body) => {
               let res = body.data
               let metadata = res.metadata
               let response = res.response
-             
-              if(metadata.status === true){
+              var dataR = response.produk_rekomendasi;
+              var tot = 0;
+              if(metadata.status === 200){
                  setProduk(response.produk_konfirmasi);
                  setRecomendProduk(response.produk_rekomendasi);
+                 var i = 0;
+                 dataR.map((item) => {
+                    tot = item.total;
+                    Trecomend += tot *1;
+                })
+                setTotRec(Trecomend);
+                console.log('Total_Rec', Trecomend);
+                 //setTampil(true);
               } else {
-                
+                Toast.show({
+                    text1: 'Maaf 🙏🏻',
+                    text2:metadata.message,
+                    position: 'bottom',
+                    type: 'error',
+                    visibilityTime:2000,
+                    bottomOffset: 150,
+                    //props: {uuid:'qqqq'},
+                  });
               }
                hitungSubtotal();
              
@@ -165,14 +204,15 @@ const BuatStruk = ({route, navigation}) => {
       }
 
       const selectItem = (select) => {
-        setVisible(!visible);
+        //setVisible(!visible);
+        SlidingUpPannel();
         setname(produk[select].nama_product);
         setHapus(produk[select].id);
         setColorHapus(produk[select].keterangan === 'dihapus');
+      }
 
-        if(produk[select].id){
-            setColor(select);
-        }
+      const selectItemReload = (select) => {
+        getData()
       }
 
       const selectItemRecomend = (select) => {
@@ -217,21 +257,42 @@ const BuatStruk = ({route, navigation}) => {
                 <ListBuatStruk 
                 nama={item.nama_product} 
                 styleBg={{backgroundColor:'#C4C4C4'}}
-                satuan={item.qty +" "+ item.satuan} 
+                satuan={'x'+item.qty} 
                 harga={item.harga}
+                styStatus={item.keterangan}
+                ImgBtn={require('../../../imgSvg/icon_hapus.png')}
                 onPress={() => selectItem(index)}
-                btnItem={() => selecItemUpdate(index)}>
+                //btnItem={() => selecItemUpdate(index)}
+                >
                 </ListBuatStruk>        
             );
 
+        } else if (item.keterangan === 'dihapus'){
+            return(
+                <ListBuatStruk 
+                nama={item.nama_product} 
+                satuan={'x'+item.qty} 
+                harga={item.harga}
+                styStatus={item.keterangan}
+                ImgBtn={require('../../../imgSvg/icon-reload.png')}
+                //onPress={() => navigation.navigate("Buat Struk", {IdOrder:IdOrder})}
+                onPress={() => selectItemReload(index)}
+                //btnItem={() => selecItemUpdate(index)}
+                >
+                </ListBuatStruk>  
+            )
+            
         } else{
             return (
                 <ListBuatStruk 
                 nama={item.nama_product} 
-                satuan={item.qty +" "+ item.satuan} 
+                satuan={'x'+item.qty} 
                 harga={item.harga}
+                styStatus={item.keterangan}
+                ImgBtn={require('../../../imgSvg/icon_hapus.png')}
                 onPress={() => selectItem(index)}
-                btnItem={() => selecItemUpdate(index)}>
+                //btnItem={() => selecItemUpdate(index)}
+                >
                 </ListBuatStruk>        
             );
 
@@ -244,8 +305,10 @@ const BuatStruk = ({route, navigation}) => {
             return (
                 <ListBuatStruk 
                 nama={item.nama_product} 
-                satuan={item.qty +" "+item.satuan} 
+                satuan={'x'+item.qty} 
                 harga={item.harga}
+                styStatus={'Rekomendasi'}
+                ImgBtn={require('../../../imgSvg/icon_hapus.png')}
                 onPress={() => selectItemRecomend(index)}>
                 </ListBuatStruk>        
             );
@@ -285,8 +348,10 @@ const BuatStruk = ({route, navigation}) => {
                     setPesan(metadata.message);
                     setVisible(false);
                     //kondisiView();
-                    kondisiBerhasil();
-    
+                    //kondisiBerhasil();
+                    SlidingUpPannelRecomend();
+                    setViewPannel(false);
+                    setShowBtn(false);
                  }else{
                      alert(metadata.message);
                  }
@@ -327,7 +392,7 @@ const BuatStruk = ({route, navigation}) => {
                     setPesan(metadata.message);
                     setShowSukses(true);
                     ViewTambah();
-                    setTampil(true);
+                    //setTampil(true);
                     getData();
                 }else{
                     alert(metadata.message);
@@ -385,6 +450,33 @@ const BuatStruk = ({route, navigation}) => {
             })
         }
 
+        const SlidingUpPannel = () => {
+            setViewPannel(true);
+            setShowBtn(false);
+          };
+        
+        const CancleSlidingUp = () => {
+            setViewPannel(false);
+            setShowBtn(true);
+            setViewPanelRec(false);
+        }
+
+        const SlidingUpPannelRecomend = () => {
+            setViewPanelRec(true);
+            setShowBtn(false);
+          };
+        
+        const CancleSlidingUpRecomend = () => {
+            setViewPanelRec(false);
+            setViewPannel(false);
+            setShowBtn(true);
+        }
+    
+        const keRecomend = () => {
+            CancleSlidingUpRecomend();
+            navigation.navigate('Rekomendasi Barang', {Token:token, IdOrder:IdOrder, Tips:Tips, Biaya_apl:Biaya_apl});
+        }
+
         
 
     return (
@@ -392,15 +484,17 @@ const BuatStruk = ({route, navigation}) => {
             <Header title="Buat Struk" onPress={() => navigation.goBack()}/>
             <ScrollView>
             <View>
-                <Text style={{fontSize:12, color:'black', marginLeft:35, marginTop:16, marginBottom:16, fontWeight:'bold'}}> Struk yang akan dikonfirmasi pembeli</Text>
+                <Text style={{fontSize:16, color:'black', marginLeft:16, marginTop:16, marginBottom:16, fontWeight:'bold'}}> Struk Konfirmasi</Text>
             </View>
-            <View style={styles.headerTittle}>
-                <Text style={styles.txt1}> Nama Produk </Text>
-                <Text style={styles.txt2}> Jumlah </Text>
-                <Text style={styles.txt3}> Harga </Text>
-                <Text style={styles.txt4}> Action </Text> 
-            </View>
-
+            <View
+                style={{
+                    borderBottomColor: '#D9D9D9',
+                    borderBottomWidth:1,
+                    marginRight:16,
+                    marginLeft:16,
+                    borderStyle:'dotted'
+                }}
+                />
             <View style={styles.bodyList}>
 
                 <ScrollView>
@@ -412,7 +506,14 @@ const BuatStruk = ({route, navigation}) => {
                 />
                 </View>
 
-                <View style={{alignItems:'center'}} >
+                <View style={{marginBottom:10}}>
+                <FlatList
+                data={produkRecomend}
+                renderItem={(item, index) => renderItemRecomend(item, index)}
+                keyExtractor={item => item.id}/>
+                </View>
+
+                {/* <View style={{alignItems:'center'}} >
                 {tampil ? (
                 <View style={styles.CrView} >
                 <View style={{marginTop:12, marginLeft:19, marginBottom:11}}>
@@ -426,82 +527,101 @@ const BuatStruk = ({route, navigation}) => {
                 <Text style={styles.txt4}> Action </Text> 
                 </View>
 
-                <View style={{marginBottom:10}}>
-                <FlatList
-                data={produkRecomend}
-                renderItem={(item, index) => renderItemRecomend(item, index)}
-                keyExtractor={item => item.id}/>
-                </View>
                 </View>
                 ): null}
-                
-                </View>
+                </View> */}
+
                 </ScrollView>
             </View>
             </ScrollView>
 
+            {showBtn ? (
             <View style={styles.CrView2}>
             <View style={styles.txtHarga}>
-            <Text style={{fontWeight:'bold', flex:1}}> Total Harga</Text>
-            <Text style={{fontWeight:'bold', flex:1, textAlign:'center'}} >{formatRupiah(subTotal, "Rp")}</Text>
+            <Text style={{fontWeight:'bold', flex:1, fontSize:14}}> Total Harga</Text>
+            <Text style={{fontWeight:'bold', flex:1, textAlign:'right', fontSize:16}} >{formatRupiah(subTotal, "Rp")}</Text>
             </View>
-            <View style={{alignItems:'center', marginBottom:32}}>
-            <View style={styles.CrViewBtn}>
-            <TouchableOpacity style={{height:38, width:324, alignItems:'center', justifyContent:'center'}} onPress={() => navigation.navigate('Preview Struk', {data:produk, dataRec:produkRecomend, IdOrder:IdOrder, Token:token, Total:subTotal})}>
+
+            <View style={{alignItems:'center', marginBottom:32, justifyContent:'center',}}>
+            <TouchableOpacity style={styles.CrViewBtn} onPress={() => navigation.navigate('Preview Struk', {data:produk, dataRec:produkRecomend, IdOrder:IdOrder, Token:token, Total:subTotal, Tips:Tips, Biaya_apl:Biaya_apl, Trec:TotRec})}>
             <Text style={{color:'white', fontSize:14, fontWeight:'bold'}}> Lanjutkan </Text>
             </TouchableOpacity>
             </View>
             </View>
-            </View>
+            ): null}
 
+
+            <CustomBottomSheet
+                visible={showPannel}
+                onVisibilityChange={() => setViewPannel()}
+                height={420}>
+            <View style={{alignItems:'center', }}>
+                <View style={{borderBottomWidth:6, borderBottomColor:'gray', width:'25%', borderRadius:12}}></View>
+                <Image source={require('../../../imgSvg/remove.png')} style={{height:120, width:120, marginTop:20}} />
+                <Text style={{ marginTop:24, fontSize:14, fontWeight:'normal', width:'100%', textAlign:'center'}}>Apakah Anda Yakin Untuk Menghapus</Text>
+                <Text style={{fontWeight:'bold', textTransform:'uppercase', marginTop:2, textAlign:'center'}}>{name}?</Text>
+                <TouchableOpacity style={{height:48, marginTop:24, width:'90%', alignItems:'center', justifyContent:'center', backgroundColor:colors.btnActif, borderRadius:100,}} onPress={HapusProduk}>
+                    <Text style={{fontSize:16, fontWeight:'bold', color:'white'}} >Hapus</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={{height:48, marginTop:24, width:'90%', alignItems:'center', justifyContent:'center', borderColor:'gray', borderWidth:1, borderRadius:100,}} onPress={CancleSlidingUp}>
+                    <Text style={{fontSize:16, fontWeight:'bold', color:'gray'}} >Batal</Text>
+                </TouchableOpacity>
+            </View>
+            </CustomBottomSheet>
+
+            <CustomBottomSheet
+                visible={showPanelRecomend}
+                onVisibilityChange={() => setViewPanelRec()}
+                height={420}>
+            <View style={{alignItems:'center', }}>
+                <View style={{borderBottomWidth:6, borderBottomColor:'gray', width:'25%', borderRadius:12}}></View>
+                <Image source={require('../../../imgSvg/recomend.png')} style={{height:120, width:120, marginTop:20}} />
+                <Text style={{ marginTop:24, fontSize:14, fontWeight:'bold', width:'60%', textAlign:'center'}}>Apakah Anda ingin merekomendasikan produk lainnya?</Text>
+                <TouchableOpacity style={{height:48, marginTop:24, width:'90%', alignItems:'center', justifyContent:'center', backgroundColor:colors.btnActif, borderRadius:100,}} onPress={keRecomend}>
+                    <Text style={{fontSize:16, fontWeight:'bold', color:'white'}} >Rekomendasikan</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={{height:48, marginTop:24, width:'90%', alignItems:'center', justifyContent:'center', borderColor:'gray', borderWidth:1, borderRadius:100,}} onPress={CancleSlidingUpRecomend}>
+                    <Text style={{fontSize:16, fontWeight:'bold', color:'gray'}} >Tolak</Text>
+                </TouchableOpacity>
+            </View>
+            </CustomBottomSheet>
             
-            <Modal animationType="slide" transparent={true}
-            visible={visible}>
-            <View style={{flex:1, alignItems:'center', justifyContent:'center'}} >
-            <View style={styles.bodyModal}>
-            <ScrollView>
-            <View style={{alignItems:"center", marginTop:27}}> 
-            <HapusIcon  />
-            </View>
-            <View style={{justifyContent:'center', alignItems:'center', flex:1, marginTop:10}} >
-            <Text style={{fontSize:14, marginRight:15, marginLeft:15, textAlign:'center'}}> Apakah Anda Yakin Ingin Menghapus Produk <Text style={{fontWeight:'bold', textTransform:'uppercase'}}>{name}?</Text> </Text>
-            </View>
-            </ScrollView>
-            <View style={{flexDirection:'row', alignItems:'center', justifyContent:'center', marginTop:10, marginBottom:33}}>
-            <TouchableOpacity style={{height:35, width:100, backgroundColor:'gray', borderRadius:6, justifyContent:'center', alignItems:'center', marginRight:10}} onPress={() => kondisi('2')} > 
-            <Text style={{fontSize:12, color:'white', fontWeight:'bold'}}> Cancel </Text> 
-            </TouchableOpacity>
-            <TouchableOpacity style={{height:35, width:100, backgroundColor:colors.btnActif, borderRadius:6, justifyContent:'center', alignItems:'center'}} onPress={HapusProduk}> 
-            <Text style={{fontSize:12, color:'white', fontWeight:'bold'}}> Hapus </Text> 
-            </TouchableOpacity>
-            </View>
-            </View>
-            </View>
-            </Modal>
 
-            <Modal animationType="slide" transparent={true}
-            visible={visibleRecomend}>
-            <View style={{flex:1, alignItems:'center', justifyContent:'center'}} >
-            <View style={styles.bodyModal}>
-            <ScrollView>
-            <View style={{alignItems:"center", marginTop:27}}> 
-            <HapusIcon  />
+            {/* <SwipeablePanel {...panelProps} isActive={showPannel}>
+            <View style={{alignItems:'center', }}>
+                <Image source={require('../../../imgSvg/remove.png')} style={{height:120, width:120, marginTop:20}} />
+                <Text style={{ marginTop:24, fontSize:14, fontWeight:'normal', width:'100%', textAlign:'center'}}>Apakah Anda Yakin Untuk Menghapus</Text>
+                <Text style={{fontWeight:'bold', textTransform:'uppercase', marginTop:2, textAlign:'center'}}>{name}?</Text>
+                <TouchableOpacity style={{height:42, marginTop:24, width:'80%', alignItems:'center', justifyContent:'center', backgroundColor:colors.btnActif, borderRadius:100,}} onPress={HapusProduk}>
+                    <Text style={{fontSize:16, fontWeight:'bold', color:'white'}} >Hapus</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={{height:42, marginTop:24, width:'80%', alignItems:'center', justifyContent:'center', borderColor:'gray', borderWidth:1, borderRadius:100,}} onPress={CancleSlidingUp}>
+                    <Text style={{fontSize:16, fontWeight:'bold', color:'gray'}} >Batal</Text>
+                </TouchableOpacity>
             </View>
-            <View style={{justifyContent:'center', alignItems:'center', flex:1, marginTop:10}} >
-            <Text style={{fontSize:14, marginRight:15, marginLeft:15, textAlign:'center'}}> Apakah Anda Yakin Ingin Menghapus Produk <Text style={{fontWeight:'bold', textTransform:'uppercase'}}>{name}?</Text> </Text>
+            </SwipeablePanel> */}
+
+        
+            {/* <CustomBottomSheet
+                visible={visibleRecomend}
+                onVisibilityChange={() => SlidingUpPannelRecomend()}
+                height={600}>
+                <View style={{alignItems:'center', }}>
+                <Image source={require('../../../imgSvg/remove.png')} style={{height:120, width:120, marginTop:20}} />
+                <Text style={{ marginTop:24, fontSize:14, fontWeight:'normal', width:'100%', textAlign:'center'}}>Apakah Anda Yakin Ingin Menghapus Produk </Text>
+                <Text style={{fontWeight:'bold', textTransform:'uppercase', marginTop:2, textAlign:'center'}}>{name}?</Text>
+                <TouchableOpacity style={{height:42, marginTop:24, width:'80%', alignItems:'center', justifyContent:'center', backgroundColor:colors.btnActif, borderRadius:100,}} onPress={CancleSlidingUpRecomend}>
+                    <Text style={{fontSize:16, fontWeight:'bold', color:'white'}} >Hapus</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={{height:42, marginTop:24, width:'80%', alignItems:'center', justifyContent:'center', borderColor:'gray', borderWidth:1, borderRadius:100,}} onPress={CancleSlidingUpRecomend}>
+                    <Text style={{fontSize:16, fontWeight:'bold', color:'gray'}} >Batal</Text>
+                </TouchableOpacity>
             </View>
-            </ScrollView>
-            <View style={{flexDirection:'row', alignItems:'center', justifyContent:'center', marginTop:10, marginBottom:33}}>
-            <TouchableOpacity style={{height:35, width:100, backgroundColor:'gray', borderRadius:6, justifyContent:'center', alignItems:'center', marginRight:10}} onPress={() => kondisi('1')} > 
-            <Text style={{fontSize:12, color:'white', fontWeight:'bold'}}> Cancel </Text> 
-            </TouchableOpacity>
-            <TouchableOpacity style={{height:35, width:100, backgroundColor:colors.btnActif, borderRadius:6, justifyContent:'center', alignItems:'center'}} onPress={getHapusBrgRecomend}> 
-            <Text style={{fontSize:12, color:'white', fontWeight:'bold'}}> Hapus </Text> 
-            </TouchableOpacity>
-            </View>
-            </View>
-            </View>
-            </Modal>
+            </CustomBottomSheet> */}
             
             <Modal animationType="slide" transparent={true}
             visible={viewRecomend}>
@@ -766,7 +886,7 @@ const BuatStruk = ({route, navigation}) => {
             </View>
             </View>
         </Modal>
-
+        <Toast ref={(ref) => Toast.setRef(ref)}/>
         </View>
     )
 }
@@ -777,7 +897,7 @@ const styles = StyleSheet.create({
 
     container:{
         flex:1,
-        backgroundColor:colors.bglayout
+        backgroundColor:'white'
     },
     header:{
         height:50,
@@ -824,7 +944,8 @@ const styles = StyleSheet.create({
     txtHarga:{
         height:21,
         marginTop:11,
-        marginLeft:42,
+        marginLeft:16,
+        marginRight:16,
         marginBottom:13,
         flexDirection:'row'
     },
@@ -840,7 +961,7 @@ const styles = StyleSheet.create({
             height: 2,
         },
 
-        width:351,
+        width:'96%',
         justifyContent:'center',
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
@@ -867,7 +988,8 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
         elevation: 5,
-        borderRadius:5
+        borderRadius:5,
+        zIndex:0
     },
     CrViewBtn:{
         shadowColor: "#000",
@@ -877,13 +999,15 @@ const styles = StyleSheet.create({
             width: 0,
             height: 2,
         },
-        height:38,
-        width:324,
+        height:48,
+        width:'92%',
         justifyContent:'center',
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
         elevation: 5,
-        borderRadius:5
+        borderRadius:100,
+        alignItems:'center',
+        
     },
     bodyModal:{
         height:308, 

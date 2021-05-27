@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image } from 'react-native'
 import { Rating, AirbnbRating } from 'react-native-ratings';
 import { PesananBaru, SvgBeranda } from '../../IconSvg'
 import { colors } from '../../Utils';
@@ -23,59 +23,54 @@ const ListRatingToko = ({kode, tanggal, nama, Rkelengkapan, Rharga, Rpelayanan, 
         <View>
             <View style={styles.CrView}>
             <TouchableOpacity>
-            <View style={{alignItems:'flex-end', marginTop:6, marginRight:14}}>
-            <View style={{alignItems:'center', justifyContent:'center', marginTop:10, height:24, width:97, paddingRight:6, paddingLeft:6,  borderColor:'#8A979F', borderWidth:1, borderRadius:12, shadowOpacity: 0.25,
-            shadowRadius: 3.20,}}>
-            <Text style={{fontSize:8, alignItems:'center', justifyContent:'center', color:'#8A979F', fontWeight:'bold'}}>{tanggal}</Text>
-            </View>
+            <View style={{alignItems:'center', marginTop:16, marginRight:14, flexDirection:'row',}}>
+            <Text style={{fontSize:12, fontWeight:'bold', marginLeft:16, color:'gray'}}>{kode}</Text>
+            <Text style={{fontSize:12, textAlign:'right', color:'gray', fontWeight:'bold', flex:1}}>{tanggal}</Text>
             </View>
             <View style={styles.page}>
-            <View style={styles.page2}>
 
-            <View style={styles.title1}>
-            <Text style={{fontSize:12, fontWeight:'bold'}}>No. Pesanan</Text>
-            <Text style={{fontSize:12, fontWeight:'bold'}}>Nama</Text>
-
-            </View>
             <View style={styles.title2}>
-            <Text style={{fontSize:12, fontWeight:'bold'}}>  : {kode}</Text>
-            <Text style={{fontSize:12, fontWeight:'bold', textTransform:'uppercase'}}>  : {nama} </Text>
+            <Text style={{fontSize:12, fontWeight:'bold', textTransform:'uppercase'}}>{nama}</Text>
             </View>
-        </View>
+
+            <View style={{borderColor:'#EBEBEB', borderWidth:1, marginTop:16}} />
 
         
-          <Text style={{marginTop:12, marginBottom:7, color:'black', fontSize:12, fontWeight:'bold'}}> Rating Kelengkapan Produk </Text>
-          <View style={{flexDirection:'row'}}>
-          <Star score={Rkelengkapan} style={starStyle} />
-          <Text style={{fontSize:16, fontWeight:"bold", alignItems:'center', marginLeft:8}}> {Rkelengkapan}/5</Text>
-          </View>
-          <Text style={{fontSize:12, color:'black',  fontWeight:'bold'}}>Komentar: </Text>
-          <Text style={{color:'gray', fontSize:12, textTransform:'capitalize'}}>{Kkelengkapan}</Text>
-        
-
-        
-          <Text style={{marginTop:12, marginBottom:7, color:'black', fontSize:12, fontWeight:'bold'}}> Rating Harga </Text>
-          <View style={{flexDirection:'row'}}>
-          <Star score={Rharga} style={starStyle} />
-          <Text style={{fontSize:16, fontWeight:"bold", alignItems:'center', marginLeft:8}}> {Rharga}/5</Text>
-          </View>
-          <Text style={{fontSize:12, color:'black', fontWeight:'bold'}}>Komentar: </Text>
-          <Text style={{color:'gray', fontSize:12, textTransform:'capitalize'}}>{Kharga}</Text>
-        
-
-        <View>
-          <Text style={{marginTop:12, marginBottom:7, color:'black', fontSize:12, fontWeight:'bold'}}> Rating Pelayanan </Text>
-          <View style={{flexDirection:'row', alignItems:'center'}}>
-          <Star score={Rpelayanan} style={starStyle} />
-          <Text style={{fontSize:16, fontWeight:"bold", alignItems:'center', marginLeft:5, marginBottom:8}}> {Rpelayanan}/5</Text>
-          </View>
           
-          <Text style={{fontSize:12, color:'black', fontWeight:'bold'}}>Komentar: </Text>
-          <Text style={{color:'gray', fontSize:12, textTransform:'capitalize'}}>{Kpelayanan}</Text>
-        </View>
+          <View style={{flexDirection:'row', alignItems:'center', marginTop:12,}}>
+          <Text style={{color:'#7A7A7A', fontSize:14, fontWeight:'bold'}}>Kelengkapan Produk </Text>
+          <View style={{flexDirection:'row', flex:1, justifyContent:'flex-end', alignItems:'center'}}>
+          <Image source={require('../../imgSvg/icon_heart.png')} style={{height:20, width:20, marginRight:6}}/>
+          <Text style={{fontSize:16, fontWeight:"bold", textAlign:'right'}}>{Rkelengkapan}</Text>
+          </View>
+        
+          </View>
+          <Text style={{color:'gray', fontSize:14, textTransform:'capitalize'}}>" {Kkelengkapan} "</Text>
+
+
+          <View style={{flexDirection:'row', alignItems:'center', marginTop:12,}}>
+          <Text style={{color:'#7A7A7A', fontSize:14, fontWeight:'bold'}}>Harga</Text>
+          <View style={{flexDirection:'row', flex:1, justifyContent:'flex-end', alignItems:'center'}}>
+          <Image source={require('../../imgSvg/icon_heart.png')} style={{height:20, width:20, marginRight:6}}/>
+          <Text style={{fontSize:16, fontWeight:"bold", textAlign:'right'}}>{Rharga}</Text>
+          </View>
+        
+          </View>
+          <Text style={{color:'gray', fontSize:14, textTransform:'capitalize'}}>" {Kharga} "</Text>
+
+        <View style={{flexDirection:'row', alignItems:'center', marginTop:12,}}>
+          <Text style={{color:'#7A7A7A', fontSize:14, fontWeight:'bold'}}>Pelayanan</Text>
+          <View style={{flexDirection:'row', flex:1, justifyContent:'flex-end', alignItems:'center'}}>
+          <Image source={require('../../imgSvg/icon_heart.png')} style={{height:20, width:20, marginRight:6}}/>
+          <Text style={{fontSize:16, fontWeight:"bold", textAlign:'right'}}>{Rpelayanan}</Text>
+          </View>
+        
+          </View>
+          <Text style={{color:'gray', fontSize:14, textTransform:'capitalize'}}>" {Kpelayanan} "</Text>
+
         </View>
         </TouchableOpacity>
-            </View>
+        </View>
             
         </View>
     )
@@ -85,28 +80,19 @@ export default ListRatingToko
 
 const styles = StyleSheet.create({
     CrView:{
-        shadowColor: "#000",
-        backgroundColor:'#ffffff',
+        backgroundColor:colors.bglayout,
         marginTop:17,
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        width:324,
         justifyContent:'center',
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        elevation: 5,
-        marginRight:10,
-        marginLeft:10,
-        marginBottom:2,
+        //elevation: 3,
+        marginRight:5,
+        marginLeft:5,
+        marginBottom:10,
         marginTop:10,
-        borderRadius:10
+        borderRadius:16,
     },
     page: {
         paddingHorizontal: 15,
         paddingVertical: 13,
-        marginBottom: 10,
         flex: 1,
       },
       page2:{
@@ -122,8 +108,9 @@ const styles = StyleSheet.create({
         width:80
       },
       title2:{
-        height:48,
-        width:220,
+        //height:48,
+        width:'100%',
+        justifyContent:'center'
       },
       rating: {
         fontSize: 17,

@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { colors } from '../../../Utils'
 
 const ListDetailPesanan1 = ({nama, satuan, status, hargaSatuan}) => {
+
+  const [showStatus, setStatus] = useState(false);
 
   function formatRupiah(num, pra) {
     return pra + ' ' + parseFloat(num).toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
@@ -11,18 +13,30 @@ const ListDetailPesanan1 = ({nama, satuan, status, hargaSatuan}) => {
         <View>
         <View style={styles.page2}>
         <View style={styles.tab1}>
-            <Text style={{fontSize:12, 
-              color:'black',
-              fontWeight:'normal',
-              textTransform:'capitalize'}}>{nama}</Text>
-              <Text style={{fontSize:10, color:colors.btnActif, fontStyle:'italic'}}>{formatRupiah(hargaSatuan, 'Rp')}</Text>
+        <Text style={{fontSize:14, 
+          color:'black',
+          fontWeight:'normal',
+          flex:1,
+          textTransform:'capitalize'}}>{nama}</Text>
+          <View style={styles.styleStatus(status)}>
+          <Text style={{fontSize:12, color:'white', textAlign:'center', textTransform:'capitalize'}}>{status}</Text>
+          </View>
+
         </View>
         <View style={styles.tab2}>
-            <Text style={{fontSize:12}}> {satuan} </Text>
+        <Text style={{fontSize:14, color:'black', fontWeight:'bold', flex:1}}>{formatRupiah(hargaSatuan, 'Rp')}</Text>
+        <Text style={{fontSize:14, flex:1, textAlign:'right', fontWeight:'bold'}}> {satuan} </Text>
         </View>
-        <View style={styles.tab3}>
-            <Text style={{fontSize:12, color:colors.btnredcolor}}>{status}</Text>
+
+        <View 
+        style={{borderBottomColor: '#D9D9D9',
+        borderBottomWidth: 1,
+        marginTop:16,
+        marginRight:16,
+        borderStyle:'dashed',
+        marginLeft:16}}>
         </View>
+        
         </View>
         </View>
     )
@@ -38,12 +52,10 @@ const styles = StyleSheet.create({
       flex: 1,
     },
     page2:{
-      flexDirection:'row',
       justifyContent:'center',
-      //width:307,
-      paddingTop:4
+      paddingTop:4,
+      marginBottom:24
 
-      
     },
     title: {
       fontSize: 12,
@@ -67,17 +79,35 @@ const styles = StyleSheet.create({
       height: 30,
     },
     tab1:{
-        flex:1,
-        marginLeft:15
+        //flex:1,
+        //paddingHorizontal:21,
+        marginLeft:16,
+        marginRight:16,
+        marginBottom:8,
+        flexDirection:'row'
         
     },
     tab2:{
         flex:1,
-        alignItems:'center'
+        //alignItems:'center'
+        flexDirection:'row',
+        //paddingHorizontal:21
+        marginLeft:16,
+        marginRight:16
+
     },
     tab3:{
-        flex:1,
-        alignItems:'flex-start',
+        width:'50%',
+        alignItems:'flex-end',
         
-    }
+    },
+    styleStatus:(colorStatus) => ({
+      backgroundColor:colorStatus == 'dihapus' ? colors.btnActif:'white', 
+      borderRadius:100, 
+      width:'20%', 
+      height:22,
+      justifyContent:'center', 
+      alignItems:'center',
+      marginLeft:10
+  })
   });

@@ -26,7 +26,7 @@ const Tab = createMaterialTopTabNavigator();
 
 const Navigation = ({navigation}) => {
   return (
-    <View style={{flex:1, backgroundColor:colors.bglayout}}>
+    <View style={{flex:1, backgroundColor:'white'}}>
       <View style={{alignItems:'center'}}>
         <Text style={{fontSize: 16,fontWeight: 'bold', marginBottom:12, marginTop:12}}> Pesanan Selesai </Text>
       </View>
@@ -37,16 +37,16 @@ const Navigation = ({navigation}) => {
         activeTintColor: colors.btnActif,
         inactiveTintColor: colors.bgPrimary,
         indicatorStyle:{
-          backgroundColor:colors.btnredcolor
+        backgroundColor:colors.btnredcolor
         },
         labelStyle: { fontSize: 12, fontWeight:'bold' },
-        style: { backgroundColor: colors.bglayout },
+        style: { backgroundColor: 'white' },
       }}>
 
       <Tab.Screen
         name="Distujui"
         component={PesananDisetujui}
-        options={{ tabBarLabel: 'Distujui' }}
+        options={{ tabBarLabel: 'Selesai' }}
       />
 
       <Tab.Screen

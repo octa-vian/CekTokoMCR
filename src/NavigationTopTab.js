@@ -9,11 +9,12 @@ import Header from './Screen/Header';
 
 
 
-const NavigationTopTab = ({ state, descriptors, navigation, position }) => {
+const NavigationTopTab = ({state, descriptors, navigation, position }) => {
+  //const {kodeSesi} = route.params;
   return (
     <View>
       <Header title= "Daftar Pesanan" onPress={()=> navigation.goBack()}/>
-    <View style={{ flexDirection: 'row', alignItems:'center', justifyContent:'space-around', backgroundColor:colors.bglayout, height:80, paddingRight:22, paddingLeft:22, paddingTop:45, paddingBottom:20 }}>
+    <View style={{ flexDirection: 'row', alignItems:'center', backgroundColor:'white', height:130, width:'100%' }}>
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];
         const label =

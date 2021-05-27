@@ -119,13 +119,54 @@ const DetailPesananDitolak = ({route, navigation}) => {
                 />
             </View>
             </View>
-            <View style={{borderBottomColor: '#D9D9D9',
+            {/* <View style={{borderBottomColor: '#D9D9D9',
                     borderBottomWidth: 1,
                     marginTop:8,
                     marginRight:22,
                     marginLeft:22}}>
 
+            </View> */}
+
+            <View style={{marginLeft:16, marginRight:16}}>
+
+                <View style={{flexDirection:'row',}}>
+                <View style={{flex:1}}>
+                <Text style={{fontSize:14, fontWeight:'bold'}}>Subtotal</Text>
+                </View>
+                <View style={{flex:1}}>
+                <Text style={{fontSize:14, fontWeight:'bold', textAlign:'right'}}>{formatRupiah(data.total, 'Rp.')}</Text>
+                </View>
+                </View>
+
             </View>
+
+            <View style={{marginLeft:16, marginRight:16}}>
+
+                <View style={{flexDirection:'row',}}>
+                <View style={{flex:1}}>
+                <Text style={{fontSize:14, fontWeight:'bold'}}>Tips</Text>
+                </View>
+                <View style={{flex:1}}>
+                <Text style={{fontSize:14, fontWeight:'bold', textAlign:'right'}}>{formatRupiah(data.tips_operasional, 'Rp.')}</Text>
+                </View>
+                </View>
+
+            </View>
+
+            <View style={{marginLeft:16, marginRight:16}}>
+
+                <View style={{flexDirection:'row',}}>
+                <View style={{flex:1}}>
+                <Text style={{fontSize:14, fontWeight:'bold'}}>Biaya Aplikasi</Text>
+                </View>
+                <View style={{flex:1}}>
+                <Text style={{fontSize:14, fontWeight:'bold', textAlign:'right'}}>{formatRupiah(data.tips_aplikasi, 'Rp.')}</Text>
+                </View>
+                </View>
+
+            </View>
+
+            <View style={{borderBottomColor:'#00000029', borderBottomWidth:1, marginLeft:16, marginRight:16, marginTop:20}}></View>
 
             <View style={styles.bodyFooter}>
                 <View style={styles.txt1}>
@@ -135,7 +176,7 @@ const DetailPesananDitolak = ({route, navigation}) => {
                 </View>
                 <View style={styles.txt2}>
                 <Text style={{fontSize:12, fontWeight:'bold'}}>
-                        {formatRupiah(data.total, 'Rp')}
+                        {formatRupiah(data.grand_total, 'Rp')}
                     </Text>
                 </View>
             </View>
@@ -180,8 +221,8 @@ const styles = StyleSheet.create({
     },
     bodyFooter:{
         flexDirection:'row',
-        marginTop:20,
-        marginBottom:21
+        marginTop:10,
+        marginBottom:10
     },
     bodyBtn:{
         marginTop:76,
@@ -279,11 +320,5 @@ const styles = StyleSheet.create({
         elevation: 5,
         borderRadius:5
     },
-    bodyFooter:{
-        flexDirection:'row',
-        marginTop:20,
-        marginBottom:21
-    },
-    
 
 })

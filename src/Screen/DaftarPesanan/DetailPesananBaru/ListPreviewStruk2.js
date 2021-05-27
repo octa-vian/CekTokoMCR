@@ -1,78 +1,101 @@
 import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
+import { colors } from '../../../Utils'
 
-const ListPreviewStruk2 = ({nama, satuan, harga, style}) => {
+const ListPreviewStruk2 = ({nama, satuan, harga, style, status}) => {
   function formatRupiah(num, pra) {
     return pra + ' ' + parseFloat(num).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
     }
     return (
-        <View>
-        <View style={styles.page2}>
-        <View style={styles.tab1}>
-            <Text style={[{fontSize:12, 
-              color:'#ffff',
-              fontWeight:'normal',
-              textTransform:'capitalize'}, style]}>{nama}</Text>
-        </View>
-        <View style={styles.tab2}>
-            <Text style={{fontSize:12, textTransform:'uppercase', color:'white', textAlign:'left'}}> {satuan} </Text>
-        </View>
+      <View style={styles.page2}>
+      <View style={styles.tab1}>
+        <View style={{flexDirection:'row', alignItems:'center',}}>
+        <Text style={{fontSize:14,
+            color:'black',
+            fontWeight:'normal',
+            textTransform:'capitalize', flex:1}}>{nama}</Text>
         <View style={styles.tab3}>
-            <Text style={{fontSize:12, color:'white', textAlign:'right'}}>{formatRupiah(harga, 'Rp')}</Text>
+          <Text style={{fontSize:12, color:'white', textTransform:'capitalize'}}>{status}</Text>
         </View>
         </View>
+        <View style={{flexDirection:'row', marginTop:8}}>
+        <Text style={{fontSize:14, color:'black', fontWeight:'bold'}}>{formatRupiah(harga, 'Rp')}</Text>
+        <View style={styles.tab2}>
+          <Text style={{fontSize:14, textAlign:'right', marginRight:16, fontWeight:'bold' }}> {satuan} </Text>
         </View>
+        </View>
+            
+      </View>
+      
+      {/* <View style={styles.tab4}>
+          <Text style={{fontSize:12, color:'black', textTransform:'capitalize'}}>{formatRupiah(harga, 'Rp')}</Text>
+      </View> */}
+      </View>
     )
 }
 
 export default ListPreviewStruk2
 
 const styles = StyleSheet.create({
-    page: {
-      paddingHorizontal: 21,
-      paddingVertical: 13,
-      marginBottom: 10,
-      flex: 1,
-    },
-    page2:{
-      flexDirection:'row',
-      justifyContent:'center',
-      width:307,
-      paddingTop:10
-    },
-    title: {
-      fontSize: 12,
-      color: 'black',
-      fontWeight:'bold'
-    },
-    title1:{
-      height:48,
-      width:71
-    },
-    title2:{
-      height:48,
-      width:220,
-    },
-    rating: {
-      fontSize: 17,
-      color: 'black',
-    },
-    poster: {
-      width: 30,
-      height: 30,
-    },
-    tab1:{
-      flex:1,
-      marginLeft:10
-      //alignItems:'center'
-    },
-    tab2:{
-        flex:1,
-        alignItems:'center'
-    },
-    tab3:{
-        flex:1,
-        alignItems:'flex-end',
-        marginRight:10
-    }
+  page: {
+    paddingHorizontal: 21,
+    paddingVertical: 13,
+    marginBottom: 10,
+    flex: 1,
+  },
+  page2:{
+    flexDirection:'row',
+    justifyContent:'center',
+    //width:'100%',
+    marginBottom:24
+    //height:22
+  },
+  title: {
+    fontSize: 12,
+    color: 'black',
+    fontWeight:'bold'
+  },
+  title1:{
+    height:48,
+    width:71
+  },
+  title2:{
+    height:48,
+    width:220,
+  },
+  rating: {
+    fontSize: 17,
+    color: 'black',
+  },
+  poster: {
+    width: 30,
+    height: 30,
+  },
+  tab1:{
+    flex:1,
+    marginLeft:16,
+    
+    //alignItems:'center'
+},
+tab2:{
+    flex:1,
+    alignItems:'flex-end'
+},
+tab3:{
+  alignItems:'center',
+  backgroundColor:'#0C80EB',
+  //width:'20%',
+  borderRadius:12,
+  marginLeft:10,
+  justifyContent:'center',
+  marginRight:10,
+  paddingRight:8,
+  paddingLeft:8,
+  height:20
+},
+tab4:{
+  flex:1,
+  alignItems:'flex-end',
+  marginRight:14
+}
   });

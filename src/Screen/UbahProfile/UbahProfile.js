@@ -2,13 +2,13 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { View, Text, ScrollView, ImageBackground, StyleSheet, Image, TouchableOpacity, ToastAndroid, Platform, Alert, Modal, ActivityIndicator, Dimensions, Animated, TextInput } from 'react-native'
 import Api from '../../Api'
-import { GambarKamera, Notif, RatingToko, ShopeNew, Stars, Str } from '../../imgSvg'
+import { GambarKamera, IconEdit, Notif, RatingToko, ShopeNew, Stars, Str } from '../../imgSvg'
 import { colors } from '../../Utils'
 import Header from '../Header'
 import ProgressDialog from 'react-native-progress-dialog';
-import LoadingImage from '../../Loading/LoadingImage'
+import LoadingImage from '../../Loading/LoadingImage';
 import ButtonList from '../../Button/ButtonPopup/ButtonList'
-import RepoUtil from '../../Helper/RepoUtil'
+import RepoUtil from '../../Helper/RepoUtil';
 import LoadingMessage from '../../Loading/LoadingMessage'
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
@@ -18,6 +18,7 @@ import LoadingSuksesTransaksi from '../../Loading/LoadingSuksesTransaksi'
 import {launchImageLibrary} from 'react-native-image-picker';
 import { IconExit } from '../../IconSvg'
 import LoadingFaildProsses from '../../Loading/LoadingFaildProsses'
+import HeaderHome from '../HeaderHome'
 const { width, height } = Dimensions.get('window');
 
 const UbahProfile = ({navigation}) => {
@@ -51,6 +52,7 @@ const UbahProfile = ({navigation}) => {
     const [jBuka, setJbuka] = useState();
     const [jTutup, setJtutup] = useState();
     const [visible, setVisible] = useState(false);
+    const [imgLoad, setloadImgProfile] = useState("");
 
     const [sukses, setSukses] = useState(false);
     const [jmBuka, setjmbuka] = useState();
@@ -337,6 +339,7 @@ const UbahProfile = ({navigation}) => {
         .catch((err) => {
             console.log('err: ', err)
             setLoading(false);
+            setImageLoading(false)
         } )
     }
 
@@ -392,7 +395,7 @@ const UbahProfile = ({navigation}) => {
     const onContinueFile = async () => {
         //const formData = createFormData(posterFile);
         const data = new FormData();
-        data.append('files', {
+        data.append('file', {
             name: imageName,
             type:"image/jpeg",
             uri: Platform.OS === 'android' ? imageFile.uri : imageFile.uri.replace('file://', '') 
@@ -401,7 +404,7 @@ const UbahProfile = ({navigation}) => {
         data.append('name','files');
 
         console.log('data request', data);
-        Api.post('profile/update_foto_merchant', data, 
+        Api.post('profile/upload_foto_merchant', data, 
         {
             headers: {
                 'Content-Type':'application/x-www-form-urlencoded'
@@ -413,11 +416,11 @@ const UbahProfile = ({navigation}) => {
             const respon = response.data.response;
 
             if(metadata.status == 200){
-  
-                //setUploadImgProfile(respon.nama_profil);
+                setloadImgProfile(respon.filename);
                 //setUploadFolderProfile(respon.folder_profil);
                 setPesan(metadata.message);
-                setSukses(true);                    
+                setSukses(true);          
+                getData();          
     
             }else{
                 setPesan(metadata.message);
@@ -433,20 +436,16 @@ const UbahProfile = ({navigation}) => {
 
     return (
         <View style={{flex:1, backgroundColor:colors.bglayout}}>
-            <Header title="Profile" onPress={() => navigation.goBack()} gambar={require('../../Gambar/setting.png')} drawer={toggleModal} />
+            <Header title="Profile" onPress={() => navigation.goBack()} gambar={require('../../Gambar/setting.png')} drawer={toggleModal} />   
 
-            <ScrollView>
-                <ImageBackground source={require('../../Gambar/bgprofilehome.png')} style={{ alignItems:'center', height:120, paddingTop:37, paddingBottom:24, paddingRight:42, zIndex:0}}>
-                </ImageBackground>
-                
+                <View style={{backgroundColor:'white', flex:1}}>
+                <ScrollView> 
                 <View
                 style={{
                     flex: 1,
                     alignItems: 'center',
-                    position:'absolute',
-                    top:50,
-                    marginLeft:35,
-                    backgroundColor: 'transparent',}} >
+                    backgroundColor: 'transparent',
+                    marginTop:16}} >
 
                 <ImageBackground
                     source={{uri: dataProfile.logo_merchant ? dataProfile.logo_merchant: null}}
@@ -454,8 +453,8 @@ const UbahProfile = ({navigation}) => {
                     style={{
                     alignItems: 'center',
                     justifyContent: 'center',
-                    width: 100,
-                    height: 100,
+                    width: 95,
+                    height: 95,
                     borderRadius: 100,
                     backgroundColor: 'white',
                     shadowColor: '#000',
@@ -465,68 +464,292 @@ const UbahProfile = ({navigation}) => {
                     elevation: 7,
                     overflow: 'visible',}}>
 
-                    <TouchableOpacity style={styles.btnProfile} onPress={getImage}>
+                    {/* <TouchableOpacity style={styles.btnProfile} onPress={getImage}>
                        <GambarKamera height={30} width={30} />
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                     
                 </ImageBackground>
                 </View>
-
-                <ImageBackground source={require('../../Gambar/bgpattren.png')} style={{paddingTop:60}}>
+                <View style={{alignItems:'center', justifyContent:'center'}}>
+                <TouchableOpacity style={{flexDirection:'row', borderColor:'#7A7A7A', borderWidth:1, borderRadius:100, height:28, width:'25%', marginTop:21, alignItems:'center', paddingLeft:6}} onPress={getImage}>
+                <IconEdit/> 
+                <Text style={{fontSize:12, marginLeft:4, color:'#7A7A7A', fontWeight:'bold'}}>Ubah Profil</Text>
+                </TouchableOpacity>
+                </View>
                     
-                        <View style={{marginLeft:20, marginRight:20}}>
-                        <View style={{flexDirection:'row'}}>
-                        <Text style={{marginTop:20, fontSize:14, fontWeight:'bold', flex:1}}> Nama Merchant </Text>
-                        <Text style={{marginTop:20, fontSize:14, textTransform:'uppercase', flex:1, }} numberOfLines={2}> {dataProfile.nama_merchant} </Text>
-                        </View>
-                        <View style={{flexDirection:'row'}}>
-                        <Text style={{marginTop:20, fontSize:14, fontWeight:'bold', flex:1}}> No Hp Merchant </Text> 
-                        <Text style={{marginTop:20, fontSize:14, flex:1, }} numberOfLines={2}> {dataProfile.no_hp_merchant} </Text>
-                        </View>
-                        <View style={{flexDirection:'row'}}>
-                        <Text style={{marginTop:20, fontSize:14, fontWeight:'bold', flex:1}}> Alamat Merchant </Text>
-                        <Text style={{marginTop:20, fontSize:14, textTransform:'capitalize', flex:1 }}>{dataProfile.alamat_merchant} </Text>
-                        </View>
-                        <View style={{flexDirection:'row'}}>
-                        <Text style={{marginTop:20, fontSize:14, fontWeight:'bold', flex:1}}> Kelurahan </Text>
-                        <Text style={{marginTop:20, fontSize:14, textTransform:'capitalize', flex:1}} numberOfLines={2}> {dataProfile.kelurahan} </Text>
-                        </View>
-                        <View style={{flexDirection:'row'}}>
-                        <Text style={{marginTop:20, fontSize:14, fontWeight:'bold', flex:1}}> Kecamatan </Text>
-                        <Text style={{marginTop:20, fontSize:14, textTransform:'capitalize', flex:1 }} numberOfLines={2} > {dataProfile.kecamatan} </Text>
-                        </View>
-                        <View style={{flexDirection:'row'}}>
-                        <Text style={{marginTop:20, fontSize:14, fontWeight:'bold', flex:1}}> Kota </Text>
-                        <Text style={{marginTop:20, fontSize:14, textTransform:'capitalize', flex:1 }} numberOfLines={2}> {dataProfile.kota} </Text>
-                        </View>
-                        <View style={{flexDirection:'row'}}>
-                        <Text style={{marginTop:20, fontSize:14, fontWeight:'bold', flex:1}}> Provinsi </Text>
-                        <Text style={{marginTop:20, fontSize:14, textTransform:'capitalize', flex:1}} numberOfLines={2} > {dataProfile.provinsi} </Text>
-                        </View>
+                <View style={{marginLeft:16, marginRight:16, marginTop:37}}>
 
-                        </View>
-
-                    <View style={{borderBottomColor: '#D4DFE6',borderBottomWidth: 2, marginVertical:10, marginLeft:23, marginRight:23, marginTop:28, marginBottom:28 }}>
+                    <View style={{ width:'100%', marginTop:16, flexDirection:'column', justifyContent:'center', padding:10}}>
+                        <Text style={{fontSize:12, flex:1, marginLeft:20, fontWeight:'bold'}}>Nama Merchant</Text>
+                        <TextInput 
+                        onChangeText={(text) => setNama(text)}
+                        value={name}  
+                        editable={false}
+                        style={{fontSize:14, color:'black', fontWeight:'bold', backgroundColor:'yellow', flex:1, height:42, borderRadius:100, backgroundColor:colors.bglayout, marginTop:10, paddingLeft:20}}>
+                        {dataProfile.nama_merchant}
+                        </TextInput>
                     </View>
 
-                    <Text style={{marginLeft:20, marginRight:20, fontSize:16, fontWeight:'bold'}}> Jam Oprasional </Text>
-                    <View style={{flexDirection:'row', marginBottom:30}}>
-                    <View style={{marginLeft:20, flex:1}}>
-                        <Text style={{marginTop:20, fontSize:14, fontWeight:'bold'}}> Jam Buka </Text>
-                        <Text style={{marginTop:20, fontSize:14, fontWeight:'bold'}}> Jam Tutup </Text>
+                    <View style={{ width:'100%', marginTop:8, flexDirection:'column', justifyContent:'center', padding:10}}>
+                        <Text style={{fontSize:12, flex:1, marginLeft:20, fontWeight:'bold'}}>Nomor HP</Text>
+                        <TextInput 
+                        onChangeText={(text) => setNama(text)}
+                        value={name}  
+                        editable={false}
+                        style={{fontSize:14, color:'black', fontWeight:'bold', backgroundColor:'yellow', flex:1, height:42, borderRadius:100, backgroundColor:colors.bglayout, marginTop:10, paddingLeft:20}}>
+                        {dataProfile.no_hp_merchant}
+                        </TextInput>
                     </View>
 
-                    <View style={{flex:1}}>
-                        <Text style={{marginTop:20, fontSize:14, }}>{dataProfile.jam_buka}</Text>
-                        <Text style={{marginTop:20, fontSize:14, }}>{dataProfile.jam_tutup}</Text>
+                    <View style={{ width:'100%', marginTop:8, flexDirection:'column', justifyContent:'center', padding:10, borderRadius:100, }}>
+                        <Text style={{fontSize:12, flex:1, marginLeft:20, fontWeight:'bold'}}>Alamat Merchant</Text>
+                        {/* <TextInput 
+                        onChangeText={(text) => setNama(text)}
+                        value={name}  
+                        editable={false}
+                        style={{fontSize:16, color:'black', fontWeight:'bold', backgroundColor:'yellow', flex:1, borderRadius:100, backgroundColor:colors.bglayout, marginTop:10, paddingLeft:20, width:'100%', paddingRight:20, height:'100%' }}>
+                        {dataProfile.alamat_merchant}
+                        </TextInput> */}
+                        <View style={{width:'100%', backgroundColor:colors.bglayout, borderRadius:100, marginTop:10}}>
+                        <Text
+                        style={{fontSize:14, color:'black', fontWeight:'bold', flex:1, borderRadius:100, paddingLeft:20, width:'100%', paddingRight:20, height:'100%', paddingTop:10, paddingBottom:10}}>
+                        {dataProfile.alamat_merchant}
+                        </Text>
+                        </View>
+                        
+                    </View>
+
+                    <View style={{ width:'100%', marginTop:8, flexDirection:'column', justifyContent:'center', padding:10}}>
+                        <Text style={{fontSize:12, flex:1, marginLeft:20, fontWeight:'bold',  color:'black'}}>Jam Buka</Text>
+                        <View style={{flexDirection:'row', justifyContent:'center', alignItems:'center', backgroundColor:colors.bglayout, borderRadius:100, flex:1, paddingLeft:20, paddingRight:20, marginTop:10}}>
+                        <Image source={require('../../imgSvg/icon-clock.png')} style={{height:25, width:25}} />
+                        <View style={{flex:1}}>
+                        <TouchableOpacity style={{justifyContent:'center', height:42, borderRadius:4, marginLeft:14}} onPress={showTimepicker}>
+                        <Text style={{fontSize:16, fontWeight:'bold'}}>{jBuka}</Text>
+                        </TouchableOpacity>
+                        </View>
                     </View>
                     </View>
 
-                </ImageBackground>
+                    <View style={{ width:'100%', marginTop:8, flexDirection:'column', justifyContent:'center', padding:10}}>
+                        <Text style={{fontSize:12, flex:1, marginLeft:20, fontWeight:'bold',  color:'black'}}>Jam Tutup</Text>
+                        <View style={{flexDirection:'row', justifyContent:'center', alignItems:'center', backgroundColor:colors.bglayout, borderRadius:100, flex:1, paddingLeft:20, paddingRight:20, marginTop:10}}>
+                        <Image source={require('../../imgSvg/icon-clock.png')} style={{height:25, width:25}} />
+                        <View style={{flex:1}}>
+                        <TouchableOpacity style={{justifyContent:'center', height:42, borderRadius:4, marginLeft:14}} onPress={showTimepicker1}>
+                        <Text style={{fontSize:16, fontWeight:'bold'}}>{jTutup}</Text>
+                        </TouchableOpacity>
+                        </View>
+                    </View>
+                    </View>
+
+
+                    {/* <View style={{backgroundColor:colors.bglayout, width:'100%', paddingBottom:8, paddingTop:8, paddingLeft:24, paddingRight:24, borderRadius:100, marginTop:16}}>
+                        <Text style={{fontSize:12}}>Provinsi</Text>
+                        <RNPickerSelect
+                            onValueChange={(value) => {
+                                setIdProvensi(value);
+                                getKota(value);
+                            }}
+                            placeholder={{
+                                label:'',
+                                value:''
+                            }}
+                            style={{inputAndroid:{
+                                justifyContent: 'center',
+                                textAlign: 'center',
+                                marginTop:8,
+                                marginBottom:10,
+                                height:37,
+                                borderRadius:4,
+                                paddingHorizontal: 10,
+                                paddingVertical: 8,
+                                placeholderColor: 'black',
+                                fontSize:12,
+                                borderWidth: 0.5,
+                                color: 'black',
+
+                            }, inputIOS:{
+                                justifyContent: 'center',
+                                textAlign:'left',
+                                fontSize:12,
+                                fontWeight:'bold',
+                                placeholderColor: 'black',
+                                height:37,
+                                width:299,
+                                paddingLeft:10,
+                                borderWidth: 1,
+                                borderRadius:4,
+                                color: 'black',
+                            }
+                            }}
+                            items={provinsi} /> 
+                    </View>
+
+                    <View style={{backgroundColor:colors.bglayout, width:'100%', paddingBottom:8, paddingTop:8, paddingLeft:24, paddingRight:24, borderRadius:100, marginTop:16}}>
+                        <Text style={{fontSize:12}}>Kota</Text>
+                        <RNPickerSelect
+                            onValueChange={(value) => {
+                                setIdKota(value);
+                                getKecamatan(value);
+                            }}
+                            placeholder={{
+                                label:'',
+                                value:''
+                            }}
+                            style={{inputAndroid:{
+                                justifyContent: 'center',
+                                textAlign: 'center',
+                                marginTop:8,
+                                marginBottom:10,
+                                height:37,
+                                borderRadius:4,
+                                paddingHorizontal: 10,
+                                paddingVertical: 8,
+                                placeholderColor: 'black',
+                                fontSize:12,
+                                borderWidth: 0.5,
+                                color: 'black',
+
+                            }, inputIOS:{
+                                justifyContent: 'center',
+                                textAlign:'left',
+                                fontSize:12,
+                                fontWeight:'bold',
+                                placeholderColor: 'black',
+                                height:37,
+                                width:299,
+                                paddingLeft:10,
+                                borderWidth: 1,
+                                borderRadius:4,
+                                color: 'black',
+                            }
+                            }}
+                            items={kota} /> 
+                    </View>
+
+
+                    <View style={{backgroundColor:colors.bglayout, width:'100%', paddingBottom:8, paddingTop:8, paddingLeft:24, paddingRight:24, borderRadius:100, marginTop:16}}>
+                        <Text style={{fontSize:12}}>Kecamatan</Text>
+                        <RNPickerSelect
+                            onValueChange={(value) => {
+                                setIdKecamatan(value);
+                                getKelurahan(value);
+                            }}
+                            placeholder={{
+                                label:'',
+                                value:''
+                            }}
+                            style={{inputAndroid:{
+                                justifyContent: 'center',
+                                textAlign: 'center',
+                                marginTop:8,
+                                marginBottom:10,
+                                height:37,
+                                borderRadius:4,
+                                paddingHorizontal: 10,
+                                paddingVertical: 8,
+                                placeholderColor: 'black',
+                                fontSize:12,
+                                borderWidth: 0.5,
+                                color: 'black',
+
+                            }, inputIOS:{
+                                justifyContent: 'center',
+                                textAlign:'left',
+                                fontSize:12,
+                                fontWeight:'bold',
+                                placeholderColor: 'black',
+                                height:37,
+                                width:299,
+                                paddingLeft:10,
+                                borderWidth: 1,
+                                borderRadius:4,
+                                color: 'black',
+                            }
+                            }}
+                            items={kecamatan} /> 
+                    </View>
+
+                    <View style={{backgroundColor:colors.bglayout, width:'100%', paddingBottom:8, paddingTop:8, paddingLeft:24, paddingRight:24, borderRadius:100, marginTop:16}}>
+                        <Text style={{fontSize:12}}>Kelurahan</Text>
+                        <RNPickerSelect
+                        onValueChange={(value) => {
+                            setIdKelurahan(value);
+                        }}
+                        placeholder={{
+                            label:'',
+                            value:''
+                        }}
+                        style={{inputAndroid:{
+                            justifyContent: 'center',
+                            textAlign: 'center',
+                            marginTop:8,
+                            marginBottom:10,
+                            height:37,
+                            borderRadius:4,
+                            paddingHorizontal: 10,
+                            paddingVertical: 8,
+                            placeholderColor: 'black',
+                            fontSize:12,
+                            borderWidth: 0.5,
+                            color: 'black',
+
+                        }, inputIOS:{
+                            justifyContent: 'center',
+                            textAlign:'left',
+                            fontSize:12,
+                            fontWeight:'bold',
+                            placeholderColor: 'black',
+                            height:37,
+                            width:299,
+                            paddingLeft:10,
+                            borderWidth: 1,
+                            borderRadius:4,
+                            color: 'black',
+                        }
+                        }}
+                        items={kelurahan} /> 
+                    </View> */}
+
+                    
+
+                    <View style={{marginLeft:16, marginRight:16, justifyContent:'center', alignItems:'center', marginTop:32, marginBottom:32}}>
+                    <TouchableOpacity style={{height:48, width:'80%', backgroundColor:colors.btnActif, borderRadius:100, alignItems:'center', justifyContent:'center'}}>
+                        <Text style={{fontSize:16, color:'white', fontWeight:'bold'}}>Simpan Perubahan</Text>
+                    </TouchableOpacity>
+                    </View>
+                    
+                </View>
+                </ScrollView>
+
+                </View>
                 <LoadingImage visible ={loadingImage} />
                 <LoadingMessage visible={loading} pesan={pesan} />
                 <ButtonList onPress={() => confirmLogout()} visible={getPopup} back={toggleModal}/>
-            </ScrollView>
+
+                {showTime && (
+                    <DateTimePicker
+                    testID="dateTimePicker"
+                    value={date}
+                    mode={mode}
+                    is24Hour={true}
+                    display='default'
+                    onChange={onChange}
+                    />
+                )}  
+
+                {showTime1 && (
+                    <DateTimePicker
+                    testID="dateTimePicker"
+                    value={dateLast}
+                    mode={mode}
+                    is24Hour={true}
+                    display='default'
+                    onChange={onChange1}
+                    />
+                )}    
+            
 
         {/* <View style={styles.borderBtn}>
             <TouchableOpacity style={styles.BtnUbahProfile} onPress={showUpdateProfile}>
@@ -585,7 +808,7 @@ const UbahProfile = ({navigation}) => {
             </TextInput>
             </View>
 
-            <View style={{backgroundColor:'white', borderRadius:12, marginLeft:10, marginRight:10, paddingTop:12, paddingBottom:12, marginTop:20}}>
+            {/* <View style={{backgroundColor:'white', borderRadius:12, marginLeft:10, marginRight:10, paddingTop:12, paddingBottom:12, marginTop:20}}>
             <Text style={{marginLeft:47, fontSize:12, fontWeight:'bold', color:'black'}}>Provinsi</Text>
 
             <RNPickerSelect
@@ -756,7 +979,7 @@ const UbahProfile = ({navigation}) => {
               }
             }}
             items={kelurahan} /> 
-            </View>
+            </View> */}
 
             <View style={{backgroundColor:'white', borderRadius:12, marginLeft:10, marginRight:10, paddingTop:12, paddingBottom:12, marginTop:20}}>
             <View style={{flexDirection:'row', alignItems:'center',}}>
@@ -773,9 +996,8 @@ const UbahProfile = ({navigation}) => {
             <TouchableOpacity style={{justifyContent:'center', alignItems:'center', height:42, width:130, backgroundColor:'#FFF3F5', borderRadius:4, marginTop:8, marginBottom:20,}} onPress={showTimepicker1}>
             <Text style={{fontSize:16, fontWeight:'bold'}}>{jTutup}</Text>
             </TouchableOpacity>
-
-
             </View>
+
             </View>
             </View>
 
@@ -794,29 +1016,7 @@ const UbahProfile = ({navigation}) => {
 
             </View>
             </View>
-        </Modal>
-
-        {showTime && (
-        <DateTimePicker
-          testID="dateTimePicker"
-          value={date}
-          mode={mode}
-          is24Hour={true}
-          display='default'
-          onChange={onChange}
-        />
-      )}  
-
-      {showTime1 && (
-        <DateTimePicker
-          testID="dateTimePicker"
-          value={dateLast}
-          mode={mode}
-          is24Hour={true}
-          display='default'
-          onChange={onChange1}
-        />
-      )}      
+        </Modal>  
 
       <LoadingSuksesTransaksi visible={sukses} pesan={pesan} onPress={() => setSukses(false)}/>
 
@@ -891,20 +1091,20 @@ const styles = StyleSheet.create({
         },
     btnProfile:
         {
-            alignItems: 'center',
-            justifyContent: 'center',
-            position: 'absolute',
-            top: 58,
-            left:67,
-            width: 35,
-            height: 35,
-            borderRadius: 50 / 2,
-            backgroundColor: 'white',
-            shadowColor: '#000',
-            shadowOffset: { width: 0, height: 0 },
-            shadowOpacity: 0.2,
-            shadowRadius: 10,
-            elevation: 7,},
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'absolute',
+        top: 58,
+        left:67,
+        width: 35,
+        height: 35,
+        borderRadius: 50 / 2,
+        backgroundColor: 'white',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0.2,
+        shadowRadius: 10,
+        elevation: 7,},
 
     BtnUbahProfile:{
         shadowColor: '#000',

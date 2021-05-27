@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { View, Text, SafeAreaView, StyleSheet, Image, TouchableOpacity, ScrollView, Switch, Vibration, FlatList, Dimensions, Modal, Platform } from 'react-native'
 import Api from '../Api';
-import { IconMahKota } from '../imgSvg';
+import { IconKasir, IconMahKota, IconPemesananBarang, IconUpdateStok } from '../imgSvg';
 import { colors } from '../Utils'
 import { fcmService } from '../FCMService';
 import Toast from 'react-native-toast-message';
@@ -37,26 +37,26 @@ const widthGrid = (Dimensions.get('window').width / cols) - (marginHorizontal * 
 const heightGrid = (Dimensions.get('window').height / rows) - (marginVertical * (rows + 1));
 const NewHome = ({navigation}) => {
 
-    const [valueSwitch, setSwitch] = useState(false);
-    const [titleSwitch, setTitileSwitch] = useState('');
-    const [statusToko, setStatusToko] = useState('');
-    const [namaToko, setNamaToko] = useState('');
-    const [imgFoto, setFoto] = useState('');
-    const [expresValue, setExpresValue] = useState(false);
-    const [ColorExpres, setChangeColor] = useState('');
-    const [pickUpValue, setPickUpValue] = useState(false);
-    const [session, setSession] = useState(null);
-    const [changeColor, setColor] = useState();
-    const [statusSesi, setStatusSesi] = useState([]);
-    const [dataMetod, setDataMetod] = useState([]);
-    const [visible1, setVisible1] = useState(false);
-    const [visible2, setVisible2] = useState(false);
-    const [showKonfrm, setKonfrm] = useState(false);
-    //const [isSesi, setSesi] = useState([]);
+const [valueSwitch, setSwitch] = useState(false);
+const [titleSwitch, setTitileSwitch] = useState('');
+const [statusToko, setStatusToko] = useState('');
+const [namaToko, setNamaToko] = useState('');
+const [imgFoto, setFoto] = useState('');
+const [expresValue, setExpresValue] = useState(false);
+const [ColorExpres, setChangeColor] = useState('');
+const [pickUpValue, setPickUpValue] = useState(false);
+const [session, setSession] = useState(null);
+const [changeColor, setColor] = useState();
+const [statusSesi, setStatusSesi] = useState([]);
+const [dataMetod, setDataMetod] = useState([]);
+const [visible1, setVisible1] = useState(false);
+const [visible2, setVisible2] = useState(false);
+const [showKonfrm, setKonfrm] = useState(false);
+//const [isSesi, setSesi] = useState([]);
 
-    const [dataSesi, setDataSesi] = useState([]);
+const [dataSesi, setDataSesi] = useState([]);
 
-    const ONE_SECOND_IN_MS = 1000;
+const ONE_SECOND_IN_MS = 1000;
 
   const PATTERN = [
     1 * ONE_SECOND_IN_MS,
@@ -90,15 +90,15 @@ const NewHome = ({navigation}) => {
       }
       if(Platform.OS === 'android'){
         PushNotification.createChannel(
-            {
-                channelId: "myCekToko", // (required)
-                channelName: "myCekToko", // (required)
-                soundName: "cektokonotif.mp3",
-                importance: 4,
-                vibrate: true,
-            },
-            (created) => console.log(`createChannel returned '${created}'`) // (optional) callback returns whether the channel was created, false means it already existed.
-            );
+        {
+            channelId: "myCekToko", // (required)
+            channelName: "myCekToko", // (required)
+            soundName: "cektokonotif.mp3",
+            importance: 4,
+            vibrate: true,
+        },
+        (created) => console.log(`createChannel returned '${created}'`) // (optional) callback returns whether the channel was created, false means it already existed.
+        );
       }
       
 
@@ -119,8 +119,8 @@ const NewHome = ({navigation}) => {
         });
         //alert("Open Notification: " + notify.body)
         playSound();
-        navigation.navigate('Notifikasi');
-        }
+        //navigation.navigate('Navigation Home');
+;    }
 
     const UploadFCMID = () => {
         const param = {
@@ -319,12 +319,6 @@ const NewHome = ({navigation}) => {
 
       }
 
-    //   useEffect(() => {
-    //     if(ColorExpres === ''){
-    //         setChangeColor('Nonaktif');
-    //     }
-    //   }, [])
-
       const BtnExpres = (stat) => {
             //setExpresValue(!expresValue);
           //setChangeColor();
@@ -361,12 +355,9 @@ const NewHome = ({navigation}) => {
             let res = body.data;
             let metadata = res.metadata;
             let response = res.response;
-
             if(metadata.status === 200){
                 getData();
-            } else {
-                
-            }
+            } 
         })
         .catch(
             err => console.log('err: ', err)
@@ -446,7 +437,7 @@ const NewHome = ({navigation}) => {
                 <Image source={require('../imgSvg/iconMahkota.png')} style={{height:18, width:24}}/>
                 {/* <IconMahKota/> */}
             </View>
-            <View style={{backgroundColor:'#FAFAFA', borderRadius:100, borderColor:colors.bglayout, elevation:2, borderWidth:1, height:32, paddingLeft:5, paddingRight:5, marginLeft:8, justifyContent:'center'}}>
+            <View style={{backgroundColor:'#FAFAFA', borderRadius:100, borderColor:colors.bglayout, borderWidth:1, height:32, paddingLeft:5, paddingRight:5, marginLeft:8, justifyContent:'center'}}>
                 <Text style={{fontWeight:"bold", fontSize:14}}>100 Poin</Text>
             </View>
             </View>
@@ -479,11 +470,11 @@ const NewHome = ({navigation}) => {
                     <Text style={styles.TxtExpres(ColorPickup)}> Pickup </Text>
                     </TouchableOpacity> */}
                     <FlatList
-                        data={dataMetod}
-                        renderItem={(item, index) => RenderItemMetod(item, index)}
-                        showsHorizontalScrollIndicator={false}
-                        horizontal={true}
-                        style={{width:'100%',}}
+                    data={dataMetod}
+                    renderItem={(item, index) => RenderItemMetod(item, index)}
+                    showsHorizontalScrollIndicator={false}
+                    horizontal={true}
+                    style={{width:'100%',}}
                     />
                 </View>
 
@@ -517,23 +508,35 @@ const NewHome = ({navigation}) => {
             style={styles.scrollContainer}>
             <View style={styles.sectionContainer}>
                 <TouchableOpacity style={styles.boxContainer} onPress={() => navigation.navigate('Pemesanan Barang')}> 
-                <Image source={require('../IconSvg/iconpemesanan.png')} style={{height:104, width:104}} />
+                {/* <Image source={require('../IconSvg/iconpemesanan.png')} style={{height:104, width:104}} /> */}
+                <IconPemesananBarang height={104} width={104}/>
                 <Text style={{fontWeight:'bold', width:'75%', textAlign:'center', marginTop:12}}>Pemesanan Barang</Text>
                 </TouchableOpacity>
+
                 <TouchableOpacity style={styles.boxContainer} onPress={() => navigation.navigate('Navigation Stok')}> 
-                <Image source={require('../IconSvg/iconupdatestok.png')} style={{height:104, width:104}} />
+                {/* <Image source={require('../IconSvg/iconupdatestok.png')} style={{height:104, width:104}} /> */}
+                <IconUpdateStok height={104} width={104}/>
                 <Text style={{fontWeight:'bold', width:'75%', textAlign:'center', marginTop:12}}>Update Stok Produk</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.boxContainer}> 
-                <IconLaporanPenjualan height={104} width={104}/>
+
+                <TouchableOpacity style={styles.boxContainer} onPress={() => navigation.navigate('Daftar Produk Kasir')}> 
+                <IconKasir height={104} width={104}/>
                 {/* <Image source={require('../IconSvg/iconlaporanpenjualan.png')} style={{height:104, width:104}} /> */}
-                <Text style={{fontWeight:'bold', width:'75%', textAlign:'center', marginTop:12}}>Laporan Penjualan</Text>
+                <Text style={{fontWeight:'bold', width:'75%', textAlign:'center', marginTop:12}}>Kasir</Text>
                 </TouchableOpacity>
+
                 <TouchableOpacity style={styles.boxContainer}> 
                 <IconAdministrasi height={104} width={104}/>
                 {/* <Image source={require('../IconSvg/iconadministrasipenjualan.png')} style={{height:104, width:104}} /> */}
                 <Text style={{fontWeight:'bold', width:'75%', textAlign:'center', marginTop:12}}>Administrasi Keuangan</Text>
                 </TouchableOpacity>
+
+                <TouchableOpacity style={styles.boxContainer}> 
+                <IconLaporanPenjualan height={104} width={104}/>
+                {/* <Image source={require('../IconSvg/iconlaporanpenjualan.png')} style={{height:104, width:104}} /> */}
+                <Text style={{fontWeight:'bold', width:'75%', textAlign:'center', marginTop:12}}>Laporan Penjualan</Text>
+                </TouchableOpacity>
+
                 <View style={styles.boxContainer}></View>
                 <View style={styles.boxContainer}></View>
             </View>
@@ -652,7 +655,7 @@ const NewHome = ({navigation}) => {
                 </View>
             </Modal>
             
-            <Toast ref={(ref) => Toast.setRef(ref)}/>
+            <Toast style={{position:'absolute'}} ref={(ref) => Toast.setRef(ref)}/>
             </View>
     )
 }
@@ -663,7 +666,7 @@ const styles = StyleSheet.create({
     borderProfile:{
         height:55, width:55, 
         alignItems:'center', 
-        elevation:4,
+        //elevation:4,
         backgroundColor:'#FAFAFA',
         borderRadius:100,
 
@@ -689,7 +692,7 @@ elevation: 13,
         backgroundColor:'#FAFAFA',
         justifyContent:'center',
         alignItems:'center',
-        elevation:2
+        //elevation:2
     },
     styleBox:{
         height:96,

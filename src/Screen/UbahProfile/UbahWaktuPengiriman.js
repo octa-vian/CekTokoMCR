@@ -283,11 +283,9 @@ const UbahWaktuPengiriman = ({navigation}) => {
 
 
             <View style={{alignItems:'center', justifyContent:'center'}}>
-
                 <TouchableOpacity style={{height:48, width:'85%', backgroundColor:colors.btnActif, borderRadius:100, marginBottom:24, alignItems:'center', justifyContent:'center'}} onPress={() => PostSesi()}>
                     <Text style={{fontSize:14, fontWeight:'bold', color:'white'}}>Simpan Perubahan</Text>
                 </TouchableOpacity>
-
             </View>
         </View>
     )

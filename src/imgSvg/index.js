@@ -1,6 +1,6 @@
 import GambarKamera from './kamera.svg';
 import DaftarPesanan from './daftarpesanan.svg';
-import RatingToko from './ratingtoko.svg';
+import IconRatingToko from './ratingtoko.svg';
 import ProdukPopuler from './produkpopuler.svg';
 import Profile from './ubahprofile.svg';
 import Notifikasi from './notifikasi.svg';
@@ -23,7 +23,37 @@ import IconStatusError from './erroraja.svg';
 import IconStatusToko from './statustoko.svg';
 import IconStatusBelanja from './statusbelanja.svg';
 import IconPanah from './panah.svg';
+import IconAkun from './icon-account.svg';
+import IconLock from './icon-lock.svg';
+import IconHome from './icon-home.svg';
+import IconHomeRed from './icon-home-red.svg';
+import IconRating from './icon-heart.svg';
+import IconRatingRed from './icon-heart-red.svg';
+import IconNotif from './icon-bell.svg';
+import IconNotifRed from './icon-bell-red.svg';
+import IconProfil from './icon-account.svg';
+import IconProfilRed from './icon-account-red.svg';
+import IconMahKota from './mahkota.svg';
+import IconPin from './iconPin.svg';
+import IconEdit from './icon-edit.svg';
+import IconPesananBaruGrey from './keranjang_grey.svg';
+import IconMenungguKonfirmasiGray from './menunggu_konfirmasi_grey.svg';
+import IconPesananSiapDikirimGray from './pesanan_siap_kirim_gray.svg';
+import IconDalamPengirimanGray from './dalam_pengiriman_grey.svg';
+import IconPesananSelesaiGray from './selesai_grey.svg';
+import IconPesananBaruRed from './keranjang_red.svg';
+import IconMenungguKonfirmasiRed from './menunggu_konfirmasi_red.svg';
+import IconPesananSiapDikirimRed from './packing_red.svg';
+import IconDalamPengirimanRed from './dalam_pengiriman_red.svg';
+import IconPesananSelesaiRed from './pesanan_selesai_red.svg';
+import IconLaporanPenjualan from './laporanpenjualan.svg';
+import IconAdministrasi from './administrasi.svg';
+import RatingKosong from './ratingkosong.svg';
+import IconKasir from './icon.svg';
+import IconPemesananBarang from './iconPemesanan.svg';
+import IconUpdateStok from './iconUpdateStok.svg';
+import IconKeranjang from './logo-keranjang.svg';
+import IconArraw from './icon-arrow.svg';
+ 
 
-
-
-export {GambarKamera, DaftarPesanan, RatingToko, ProdukPopuler, Profile, Notifikasi, Rat, Stars, Str, Notif, Bintang, Hands, Shop, ShopHitam, ShopeNew, StoreBlack, Profilee, LogoKonfrm, HapusIcon, IconBerhasil, IconRekomen, IconStatusError, IconStatusToko, IconStatusBelanja, IconPanah};
+export {GambarKamera, DaftarPesanan, IconRatingToko, ProdukPopuler, Profile, Notifikasi, Rat, Stars, Str, Notif, Bintang, Hands, Shop, ShopHitam, ShopeNew, StoreBlack, Profilee, LogoKonfrm, HapusIcon, IconBerhasil, IconRekomen, IconStatusError, IconStatusToko, IconStatusBelanja, IconPanah, IconAkun, IconLock, IconHome, IconHomeRed, IconNotif, IconNotifRed, IconProfil, IconProfilRed, IconRating, IconRatingRed, IconMahKota, IconPin, IconEdit, IconPesananBaruGrey, IconPesananBaruRed, IconMenungguKonfirmasiGray, IconMenungguKonfirmasiRed, IconPesananSiapDikirimGray, IconPesananSiapDikirimRed, IconDalamPengirimanGray, IconDalamPengirimanRed, IconPesananSelesaiGray, IconPesananSelesaiRed, IconLaporanPenjualan, IconAdministrasi, RatingKosong, IconKasir, IconPemesananBarang, IconUpdateStok, IconKeranjang, IconArraw};

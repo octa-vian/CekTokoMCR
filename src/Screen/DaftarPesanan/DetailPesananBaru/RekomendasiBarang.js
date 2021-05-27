@@ -28,7 +28,7 @@ const RekomendasiBarang = ({route, navigation}) => {
     const [showPannel, setViewPannel] = useState(false);
     const [namaProduk, setNamaProduk] = useState('');
     const [dataProduk, setDataProduk] = useState([]);
-    const [harga, setHarga] = useState('');
+    const [harga, setHarga] = useState(0);
     const [jumlah, setJumlah] = useState(0);
     const {IdOrder} = route.params;
     const {Token} = route.params;
@@ -284,7 +284,7 @@ const RekomendasiBarang = ({route, navigation}) => {
                     <Image source={require('../../../imgSvg/icon-down.png')} style={{height:20, width:20,}}/>
                 </TouchableOpacity>
 
-                <View style={{paddingLeft:24, paddingRight:24, marginTop:24, height:48, backgroundColor:colors.bglayout, marginLeft:16, marginRight:16, borderRadius:100, alignItems:'center'}}>
+                <View style={{paddingLeft:24, paddingRight:24, marginTop:24, height:48, backgroundColor:colors.bglayout, marginLeft:16, marginRight:16, borderRadius:100, alignItems:'center', justifyContent:'center'}}>
                     <TextInput 
                     value={jumlah}
                     placeholder="Jumlah"

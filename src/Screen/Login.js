@@ -13,12 +13,17 @@ import {
   ImageBackground,
   ToastAndroid,
   Platform,
+  KeyboardAvoidingView,
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import Api from '../Api';
 import RepoUtil from '../Helper/RepoUtil';
+import { IconAkun, IconLock } from '../imgSvg';
+import LoadingBoomer from '../Loading/LoadingBoomer';
+import LoadingImage from '../Loading/LoadingImage';
 import LoadingMessage from '../Loading/LoadingMessage';
 import { colors } from '../Utils';
+import Toast from 'react-native-toast-message';
 
 const win = Dimensions.get('window');
 const {width, height} = win;
@@ -40,7 +45,7 @@ const Login = ({navigation}) => {
     setSession(dataRepo);
     if (dataRepo != null) {
       //alert('Anda Sudah Login');
-      navigation.replace('Home');
+      navigation.replace('Navigation Home');
     }
   };
 
@@ -67,14 +72,28 @@ const Login = ({navigation}) => {
         .then(async (response) => {
             let res = response.data;
             let metadata = res.metadata;
-            console.log(res)
+            console.log(res);
             if (metadata.status === 200 ) {
                 RepoUtil.StoreAsObject('@session', res);
-                navigation.replace('Home');
-               
-                setPesan(metadata.message);
-            } else {
-                setPesan(metadata.message);
+                //setPesan(metadata.message);
+                Toast.show({
+                  text1: 'Succses👋',
+                  text2: metadata.message,
+                  position: 'bottom',
+                  type: 'success',
+                  visibilityTime:2000,
+                });
+                navigation.replace('Navigation Home');               
+            } 
+             else {
+                //setPesan(metadata.message);
+                Toast.show({
+                  text1: 'Maaf 🙏🏻',
+                  text2: metadata.message,
+                  position: 'bottom',
+                  type: 'error',
+                  visibilityTime:2000,
+                });
               
             }
         })
@@ -85,103 +104,179 @@ const Login = ({navigation}) => {
 
 };
 
-  const ImgIcon = () =>{
-    return(
-        <View>
-            <View style={{color:'gray', marginTop:21, marginLeft:24}}>
-        <Image source = {require('../Gambar/logocektoko.png')} style = {{width:45, height:55, resizeMode:'stretch', alignItems:'center'}}></Image>  
-        </View>
-        </View>
-    );
-};
 
+const Validation = (text) => {
 
-  return (
-    <View style={styles.page}>
-    <ImageBackground source={require('../Gambar/bgpattren.png')} style={{flex:1}}>
-    <ScrollView>
-    <View style={{marginTop:144, alignItems:'center'}}>
-    <View style={{alignItems:'center', justifyContent:'center', width:244, height:208}}>
-    <Image style={{width:244, height:208}} source = {require('../imgSvg/merchantpict.png')}/> 
-    </View>
+  if(text === ''){
+    alert('gagal');
+  }
+
+}
+
+  if(Platform.OS === 'ios'){
+
+    return (
+      <View style={styles.page}>
+      <ScrollView showsVerticalScrollIndicator={false} style={{backgroundColor:'white'}}>
+      <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 40 : 0}>
+      <View style={{marginTop:80, alignItems:'center', backgroundColor:'#ffffff', paddingBottom:10}}>
+      <View style={{alignItems:'center', justifyContent:'center',}}>
+      <Image style={{width:225, height:210}} source = {require('../imgSvg/logologin.png')}/> 
+      </View>
   
-      <TextInput
-        autoCapitalize="none"
-        style={styles.form}
-        placeholder="Username"
-        value={username}
-        onChangeText={(value) => setUsername(value)}
-      />
+      <View style={{alignItems:'center', marginTop:40}}>
+        <Text style={{fontWeight:'bold', fontSize:24, color:'#ED0A2A'}}> Hei, Cekfren! </Text>
+        <Text style={{fontSize:16, fontWeight:'900',}}>Selamat Datang Di Aplikasi Cektoko</Text>
+      </View>
   
-      <View style={styles.container}>
+        <View style={styles.form}>
+        <Image source={require('../imgSvg/user.png')} style={{height:18, width:18}}/>
         <TextInput
-          underlineColorAndroid="transparent"
-          style={styles.textBox}
-          placeholder="Password"
-          value={password}
-          secureTextEntry={isSecure}
-          onChangeText={value => setPassword(value)}
+          autoCapitalize="none"
+          placeholder="Username"
+          value={username}
+          style={{flex:1, marginLeft:16}}
+          onChangeText={(value) => setUsername(value)}        
         />
-        {/* Tambah ToucableOpacity */}
-        <TouchableOpacity
-          activeOpacity={0.8}
-          style={styles.touachableButton}
-          onPress={() => setSecure(!isSecure)}>
-          <Image
-            source={
-              isSecure
-                ? require('../Gambar/invisible.png')
-                : require('../Gambar/view.png')
-            }
-            style={styles.buttonImage}
+        </View>
+        
+        <View style={styles.textBox}>
+          <Image source={require('../imgSvg/pass.png')} style={{height:19, width:18}}/>
+          <TextInput
+            underlineColorAndroid="transparent"
+            placeholder="Password"
+            style={{flex:1, marginLeft:16, marginRight:8 }}
+            value={password}
+            secureTextEntry={isSecure}
+            onChangeText={value => setPassword(value)}
           />
-        </TouchableOpacity> 
+          {/* Tambah ToucableOpacity */}
+          <TouchableOpacity
+            activeOpacity={0.8}
+            style={styles.touachableButton}
+            onPress={() => setSecure(!isSecure)}>
+            <Image
+              source={
+                isSecure
+                  ? require('../Gambar/invisible.png')
+                  : require('../Gambar/view.png')
+              }
+              style={styles.buttonImage}
+            />
+          </TouchableOpacity> 
+        </View>
+  
+        <TouchableOpacity style={styles.btnLogin} onPress={() =>{ loginAction()} } disabled={isProcess ? true : false}>
+          <Text style={{color:'white', fontSize:14}}> Masuk </Text>
+        </TouchableOpacity>
+  
+        </View>
+        {/* <LoadingBoomer visible={isProcess}/> */}
+        </KeyboardAvoidingView>
+        </ScrollView>
+        <Toast ref={(ref) => Toast.setRef(ref)}/>
       </View>
+    );
 
-      <TouchableOpacity style={styles.btnLogin} onPress={() => loginAction()} disabled={isProcess ? true : false}>
-        <Text style={{color:'white'}}> Login</Text>
-      </TouchableOpacity>
+  } else {
 
-      {/* <View style={styles.btnLogin}>
-        <Button
-        title="Login"
-        onPress={() => loginAction()}
-        disabled={isProcess ? true : false}
+    return (
+      <View style={styles.page}>
+      <ScrollView showsVerticalScrollIndicator={false} style={{backgroundColor:'white'}}>
+      <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 40 : 0}>
+      <View style={{marginTop:80, alignItems:'center', backgroundColor:'#ffffff', paddingBottom:10}}>
+      <View style={{alignItems:'center', justifyContent:'center',}}>
+      <Image style={{width:300, height:278}} source = {require('../imgSvg/logologin.png')}/> 
+      </View>
+  
+      <View style={{alignItems:'center', marginTop:40}}>
+        <Text style={{fontWeight:'bold', fontSize:24, color:'#ED0A2A'}}> Hei, Cekfren! </Text>
+        <Text style={{fontSize:16, fontWeight:'900',}}>Selamat Datang Di Aplikasi Cektoko</Text>
+      </View>
+  
+        <View style={styles.form}>
+        <Image source={require('../imgSvg/user.png')} style={{height:18, width:18}}/>
+        <TextInput
+          autoCapitalize="none"
+          placeholder="Username"
+          value={username}
+          style={{flex:1, marginLeft:16}}
+          onChangeText={(value) => setUsername(value)}
+          
         />
-      </View> */}
-
+        </View>
+        
+        <View style={styles.textBox}>
+          <Image source={require('../imgSvg/pass.png')} style={{height:19, width:18}}/>
+          <TextInput
+            underlineColorAndroid="transparent"
+            placeholder="Password"
+            style={{flex:1, marginLeft:16, marginRight:8 }}
+            value={password}
+            secureTextEntry={isSecure}
+            onChangeText={value => setPassword(value)}
+          />
+          {/* Tambah ToucableOpacity */}
+          <TouchableOpacity
+            activeOpacity={0.8}
+            style={styles.touachableButton}
+            onPress={() => setSecure(!isSecure)}>
+            <Image
+              source={
+                isSecure
+                  ? require('../Gambar/invisible.png')
+                  : require('../Gambar/view.png')
+              }
+              style={styles.buttonImage}
+            />
+          </TouchableOpacity> 
+        </View>
+  
+        <TouchableOpacity style={styles.btnLogin} onPress={() =>{ loginAction()} } disabled={isProcess ? true : false}>
+          <Text style={{color:'white', fontSize:14}}> Masuk </Text>
+        </TouchableOpacity>
+  
+        </View>
+        {/* <LoadingBoomer visible={isProcess}/> */}
+        </KeyboardAvoidingView>
+        </ScrollView>
+        <Toast ref={(ref) => Toast.setRef(ref)}/>
       </View>
+    );
+  }
 
-      {/* Tambah Modal */}
-      <LoadingMessage visible={isProcess} pesan={pesan} />
-      </ScrollView>
-      </ImageBackground>
-    </View>
-  );
+  
 };
 
 export default Login;
 
 const styles = StyleSheet.create({
   page: {
-    backgroundColor:colors.bglayout,
+    backgroundColor:'#E5E5E5',
     flex:1
   },
   label: {
     marginBottom: 10,
   },
   form: {
-    backgroundColor:'white',
             fontSize:14,
-            color:'black',
-            backgroundColor:'#FFFFFF',
-            width:268, 
-            height: 37, 
-            borderColor:colors.bgPrimary,
+            color:'#7A7A7A',
+            fontWeight:'900',
+            backgroundColor:'#FAFAFA',
+            width:'90%', 
+            height: 49, 
+            //borderColor:colors.bgPrimary,
             borderWidth: 1,
-            borderRadius:8,
-            paddingLeft:10 ,
-            marginTop:45
+            borderRadius:100,
+            paddingLeft:28 ,
+            marginTop:40,
+            flexDirection:'row',
+            alignItems:'center',
+            justifyContent:'center',
   },
 
   headerText: {
@@ -194,35 +289,37 @@ const styles = StyleSheet.create({
 
   btnLogin:{
     justifyContent:'center',
-        borderRadius:5,
+        borderRadius:100,
         alignItems:'center',
         marginTop:29,
-        width:133,
-        height:33,
+        width:'90%',
+        height:49,
         backgroundColor:colors.btnredcolor,
   },
 
   textBox: {
-    alignSelf: 'stretch',
-    paddingRight: 45,
-    borderWidth: 1,
-    paddingVertical: 0,
-    backgroundColor:'#FFFFFF',
+    backgroundColor:'#FAFAFA',
     fontSize:14,
-    color:'black',
-    width:268, 
-    height: 37, 
-    borderColor:colors.bgPrimary,
+    color:'#7A7A7A',
+    fontWeight:'900',
+    width:'90%', 
+    height: 49, 
+    //borderColor:colors.bgPrimary,
     borderWidth: 1,
-    borderRadius:8,
-    paddingLeft:10 
+    borderRadius:100,
+    paddingLeft:28,
+    justifyContent:'center',
+    marginTop:16,
+    flexDirection:'row',
+    alignItems:'center'
   },
   touachableButton: {
-    position: 'absolute',
+    //position: 'absolute',
     right: 10,
     height: 25,
     width: 25,
     padding: 2,
+    flex:0.1
   },
   buttonImage: {
     resizeMode: 'contain',
@@ -233,6 +330,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop:22,
+    width:'90%',
+    flexDirection:'row'
 
   },
 });

@@ -8,6 +8,7 @@ import Toast from 'react-native-toast-message';
 import CustomBottomSheet from 'react-native-custom-bottom-sheet'
 import VirtualKeyboard from 'react-native-virtual-keyboard';
 import RepoUtil from '../../Helper/RepoUtil';
+import Tooltip from 'react-native-walkthrough-tooltip';
 var uid = '';
 
 const DetailProdukNew = ({route, navigation}) => {
@@ -24,6 +25,7 @@ const DetailProdukNew = ({route, navigation}) => {
     const [showPopUpHapus, setShowPopUpHapus] = useState(false);
     const [jumlah, setJumlah] = useState(0);
     const [Mstok, setStok] = useState(0);
+    const [showTooltip, setShowTooltip] = useState(false);
     const [getProduk, setDataProduk] = useState({
         stok:'',
         stok_minimal:'',
@@ -154,7 +156,7 @@ const DetailProdukNew = ({route, navigation}) => {
             return(
                 <ListRincianStokProduk
                 statusStok={item.keterangan}
-                jumlah={item.stok}
+                jumlah={item.stok_sebelumnya}
                 totalStok={item.sisa_stok}
                 tanggal={item.insert_at}>
                 </ListRincianStokProduk>
@@ -345,8 +347,26 @@ const DetailProdukNew = ({route, navigation}) => {
 
                 </View>
 
-                <View style={{flexDirection:'row', alignItems:'center', marginTop:20}}>
-                <Text style={{flex:1, fontWeight:'bold', fontSize:14}}>Stok Minimum</Text>
+                <View style={{flexDirection:'row', alignItems:'center', marginTop:20,}}>
+                <View style={{flex:1, justifyContent:'flex-start', flexDirection:'row'}}>
+                <Text style={{fontWeight:'bold', fontSize:14}}>Stok Minimum</Text>
+                {/* <Text style={{height:'12%', width:'12%', backgroundColor:colors.btnTextGray, color:'white', borderRadius:100, marginLeft:10, textAlign:'center', fontWeight:'bold'}} onPress={() => setShowTooltip(true)}>?</Text> */}
+                <Tooltip
+                animated={true}
+                arrowSize={{width:16, height:8}}
+                backgroundColor="rgba(0,0,0,0.0)"
+                contentStyle={{backgroundColor:'black', borderRadius:8}}
+                //arrowStyle={{alignItems:'center', justifyContent:'center',}}
+                isVisible={showTooltip}
+                content={<Text style={{color:'white', fontSize:14}}>Bila stok barang kurang dari jumlah yang di set disini, barang akan otomatis ke tab “Stok Menipis”</Text>}
+                onClose={() => setShowTooltip(false)}
+                placement='top'>
+                <TouchableOpacity style={{backgroundColor:colors.btnTextGray, height:20, width:20, marginLeft:10, borderRadius:100, alignItems:'center', justifyContent:'center'}} onPress={() => setShowTooltip(true)}>
+                    <Text style={{color:'white', fontWeight:'bold'}}>?</Text>
+                </TouchableOpacity>
+                </Tooltip>
+                
+                </View>
                 <TouchableOpacity style={{height:28, width:28, alignItems:'center', justifyContent:'center', borderColor:colors.btnActif, borderRadius:100, borderWidth:1,  }} onPress={onMinus}>
                     <Text style={{fontSize:18, fontWeight:'bold'}} >-</Text>
                 </TouchableOpacity>
@@ -406,7 +426,7 @@ const DetailProdukNew = ({route, navigation}) => {
             </View>
             </CustomBottomSheet>
 
-                <Toast ref={(ref) => Toast.setRef(ref)}/>
+            <Toast ref={(ref) => Toast.setRef(ref)}/>
         </View>
     )
 }

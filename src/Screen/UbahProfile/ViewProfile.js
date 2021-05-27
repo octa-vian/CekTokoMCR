@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { View, Text, StyleSheet, Image, TouchableOpacity, Switch, ScrollView, Alert, Animated } from 'react-native'
 import Api from '../../Api'
 import RepoUtil from '../../Helper/RepoUtil'
-import { IconEdit, IconPin } from '../../imgSvg'
+import { IconEdit, IconPin, Str } from '../../imgSvg'
 import LoadingImage from '../../Loading/LoadingImage'
 import { colors } from '../../Utils'
 import HeaderHome from '../HeaderHome'
@@ -27,6 +27,10 @@ const ViewProfile = ({navigation}) => {
     const [date2, setDate2] = useState(new Date());
     const [showPannel, setViewPannel] = useState(false);
     const [imgFoto, setFoto] = useState('');
+
+    const [dataSesi1, setDataSesi1] = useState('');
+    const [dataSesi2, setDataSesi2] = useState('');
+    const [dataSesi3, setDataSesi3] = useState('');
 
     const [dataProfile, setProfile] = useState({
         id:'',
@@ -86,7 +90,14 @@ const ViewProfile = ({navigation}) => {
       useEffect(() => {
         loadSession();
         getData();
-     }, []);
+        const unsubscribe = navigation.addListener('focus', () => {
+            getData();
+            loadSession();
+          })
+          return()=>{
+            unsubscribe
+          }
+     }, [navigation]);
 
       const confirmLogout = () => {
         RepoUtil.RemoveValue('@session');
@@ -107,18 +118,38 @@ const ViewProfile = ({navigation}) => {
                 console.log("time: ",resData.jam_buka)
                 //setPesan(metadata.message);
                 setFoto(resData.logo_merchant);
-
+                var dataSesi = [];
+                dataSesi = resData.sesi_pengiriman;
+                console.log('S',dataSesi);
                 var timeBuka = moment(resData.jam_buka, "HH:mm:ss").format("HH:mm");
                 var timeTutup = moment(resData.jam_tutup, "HH:mm:ss").format("HH:mm");
                 setJambuka(timeBuka);
                 setJamTutup(timeTutup);
 
-                //onChange(timeBuka, timeTutup);
-                // provinsi.map((item) => {
-                //     if(item.label == resData.provinsi){
-                //         setIdProvensi(item.value);
-                //     }
-                // })
+                var i = 0;
+                var s1 = 0;
+                var s2 = 0;
+                var s3 = 0;
+                dataSesi.map((item) => {
+                    if(i == 2){
+                        s3 = item.jam;
+                        var jm1 = s3.substring(0, 8);
+                        var jm2 = s3.substring(s3.length - 8);
+                        setDataSesi3(moment(jm1, 'HH:mm:ss').format('HH:mm') +' - '+ moment(jm2, 'HH:mm:ss').format('HH:mm'))
+                    } else if(i == 3) {
+                        s2 = item.jam;
+                        var jm1 = s2.substring(0, 8);
+                        var jm2 = s2.substring(s2.length - 8);
+                        setDataSesi2(moment(jm1, 'HH:mm:ss').format('HH:mm') +' - '+ moment(jm2, 'HH:mm:ss').format('HH:mm'));
+                    } else if(i == 4) {
+                        s1 = item.jam;
+                        var jm1 = s1.substring(0, 8);
+                        var jm2 = s1.substring(s1.length - 8);
+                        setDataSesi1(moment(jm1, 'HH:mm:ss').format('HH:mm') +' - '+ moment(jm2, 'HH:mm:ss').format('HH:mm'));
+                    }
+                    i++;
+                })
+
                 
             } else if (metadata.status === 401){
                 RepoUtil.RemoveValue('@session');
@@ -170,8 +201,8 @@ const ViewProfile = ({navigation}) => {
             <View style={{flexDirection:'row', marginTop:24, marginLeft:16, marginRight:16, alignItems:'center',}}>
                 <View style={styles.styleImage}>
                 <Image 
-                source={imgFoto != '' ? {uri:imgFoto}: {uri:exampleImageUri}}
-                style={{height:95, width:95, borderRadius:100}} />
+                source={imgFoto != '' ? {uri:imgFoto} : {uri:exampleImageUri}}
+                style={{height:95, width:95, borderRadius:100}}/>
                 </View>
                 <View style={{flex:1, marginLeft:20, marginRight:16}}>
                 <Text style={{fontSize:16, fontWeight:'bold', textTransform:'capitalize'}}>{dataProfile.nama_merchant}</Text>
@@ -205,19 +236,19 @@ const ViewProfile = ({navigation}) => {
 
                 <View style={{height:48, backgroundColor:'#FAFAFA', elevation:3, marginTop:24, borderRadius:16, flexDirection:'row', alignItems:'center'}}>
                     <View style={{flex:1, paddingLeft:16,}}>
-                        <Text style={{fontSize:16, fontWeight:'bold'}}>09:00 - 11:00</Text>
+                        <Text style={{fontSize:16, fontWeight:'bold'}}>{dataSesi1.toString()}</Text>
                     </View>
                 </View>
 
                 <View style={{height:48, backgroundColor:'#FAFAFA', elevation:3, marginTop:24, borderRadius:16, flexDirection:'row', alignItems:'center'}}>
                     <View style={{flex:1 ,paddingLeft:16,}}>
-                        <Text style={{fontSize:16, fontWeight:'bold'}}>14:00 - 18:00</Text>
+                        <Text style={{fontSize:16, fontWeight:'bold'}}>{dataSesi2.toString()}</Text>
                     </View>
                 </View>
 
-                <View style={{height:48, backgroundColor:'#FAFAFA', elevation:3, marginTop:24, borderRadius:12, flexDirection:'row', alignItems:'center', marginBottom:10}}>
+                <View style={{height:48, backgroundColor:'#FAFAFA', elevation:3, marginTop:24, borderRadius:16, flexDirection:'row', alignItems:'center', marginBottom:10}}>
                     <View style={{flex:1 ,paddingLeft:16,}}>
-                        <Text style={{fontSize:16, fontWeight:'bold'}}>18:00 - 21:00</Text>
+                        <Text style={{fontSize:16, fontWeight:'bold'}}>{dataSesi3.toString()}</Text>
                     </View>
                 </View>
             </View>

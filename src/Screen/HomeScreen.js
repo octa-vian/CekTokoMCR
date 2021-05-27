@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, Image, ImageBackground, SafeAreaView, ScrollView, Modal,} from 'react-native'
 import {colors} from '../Utils'
 import { color } from 'react-native-reanimated';
-import { DaftarPesanan, Hands, IconPanah, IconStatusBelanja, IconStatusToko, Notif, Notifikasi, ProdukPopuler, Profile, Rat, RatingToko, Shop, ShopHitam, Stars } from '../imgSvg';
+import { DaftarPesanan, Hands, IconPanah, IconRatingToko, IconStatusBelanja, IconStatusToko, Notif, Notifikasi, ProdukPopuler, Profile, Rat, Shop, ShopHitam, Stars } from '../imgSvg';
 import { IconExit, PesananBaru } from '../IconSvg';
 import RepoUtil from '../Helper/RepoUtil';
 import Api from '../Api';
@@ -152,11 +152,11 @@ const HomeScreen = ({navigation}) => {
 
           if(metadata.status === 200){
             setPesanStatus(metadata.message);
-            setSukses(true);
+           //setSukses(true);
             getData();
           } else {
             setPesanStatus(metadata.message);
-            setSukses(true);
+            //setSukses(true);
             getData();
           }
         })
@@ -332,7 +332,7 @@ const HomeScreen = ({navigation}) => {
                 <TouchableOpacity style={styles.CrView} onPress={() => navigation.navigate('Ratingtoko')}>
                     <View style={styles.rowBodyCard}>
                         <View style={{alignItems:'center', marginLeft:20}}>
-                        <RatingToko/>
+                        <IconRatingToko/>
                         </View>
                     <Text style={{fontSize:14, fontWeight:'bold', marginLeft:40}} >
                         Rating Toko
@@ -372,6 +372,17 @@ const HomeScreen = ({navigation}) => {
                     </Text> 
                     </View>
                 </TouchableOpacity>
+
+                {/* <TouchableOpacity style={styles.CrView} onPress={() => navigation.navigate('Show Notif')}>
+                    <View style={styles.rowBodyCard}>
+                        <View style={{alignItems:'center', marginLeft:20}}>
+                        <Notif/>
+                        </View>
+                    <Text style={{fontSize:14, fontWeight:'bold', marginLeft:40}} >
+                        Button Show Notifikasi 
+                    </Text> 
+                    </View>
+                </TouchableOpacity> */}
             </View>
             </ScrollView>
             </ImageBackground>

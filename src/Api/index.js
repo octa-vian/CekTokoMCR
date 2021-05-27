@@ -2,7 +2,7 @@ import axios from 'axios';
 import RepoUtil from '../Helper/RepoUtil';
 
 const Api = axios.create({
-  baseURL: 'Https://Cektoko.com/api/',
+  baseURL: 'Https://Cektoko.com/panel/api/',
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json',

@@ -102,7 +102,7 @@ const ProdukMenipis = ({navigation}) => {
             value.posisi=false;
         })
         btn[select].posisi=true;
-
+        
         if(btn[select].posisi === true){
            // alert('berhasil');
             setColor(select);

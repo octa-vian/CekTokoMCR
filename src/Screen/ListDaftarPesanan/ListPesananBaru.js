@@ -1,42 +1,35 @@
 import React from 'react'
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
+import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native'
 import { colors } from '../../Utils'
 
-const ListPesananBaru = ({kode, tanggal, jam, onPress, insertAt, metode}) => {
+const ListPesananBaru = ({kode, tanggal, jam, onPress, insertAt, metode, stylebg, total, jumlah, image, metodPembayaran}) => {
+
+  function formatRupiah(num, pra) {
+    return pra + ' ' + parseFloat(num).toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+  }
     return (
-        <View>
+        <View style={{width:'100%'}}>
         <TouchableOpacity style={styles.CrView} onPress={onPress}>
-        <View style={{flexDirection:'row', justifyContent:'center'}}>
-        <View style={{flex:1, marginLeft:21, marginTop:11}}>
-        <Text style={{fontSize:12, fontWeight:'bold'}}>No. Pesanan</Text>
-        <Text style={{fontSize:12, fontWeight:'bold', color:'#EB2843'}}>{kode} </Text>
-        </View>
-        <View style={{alignItems:'flex-end', flex:1}}>
-        <View style={{alignItems:'center', justifyContent:'center', marginTop:10, marginBottom:6, height:24, width:97, marginRight:12, borderColor:'#8A979F', borderWidth:1, borderRadius:12, shadowOpacity: 0.25,
-        shadowRadius: 3.20,}}>
-        <Text style={{fontSize:8, alignItems:'center', justifyContent:'center', color:'#8A979F', fontWeight:'bold'}}> {insertAt} </Text>
-        </View>
+        <View style={{flexDirection:'row', justifyContent:'center', alignItems:'center'}}>
+          
+        <View style={{alignItems:'flex-start', marginLeft:16, }}>
+        <View style={[styles.stylebgStatus, stylebg]}>
+        <Image style={{height:15, width:15, marginRight:8}} source={image} /> 
+        <Text style={{fontSize:12, alignItems:'center', justifyContent:'center', color:'white', fontWeight:'bold'}}>{metode}</Text>
         </View>
         </View>
 
-        <View style={{borderBottomColor: '#00000029',borderBottomWidth: 1, marginVertical:10, marginTop:5 }}></View>
-        <View style={styles.page}>
-        <View style={styles.page2}>
-            <View style={styles.title1}>
-            
-            <Text style={{fontSize:12, fontWeight:'bold'}}>Pengiriman</Text>
-            <Text style={{fontSize:12, fontWeight:'bold'}}>Metode Belanja</Text>
-            <Text style={{fontSize:12, fontWeight:'bold'}}>Jam</Text>
-            
-            </View>
-            <View style={styles.title2}>
-            <Text style={{fontSize:12, fontWeight:'bold'}}>  : {tanggal} </Text>
-            <Text style={{fontSize:12, fontWeight:'bold'}}>  : {metode} </Text>
-            <Text style={{fontSize:12, fontWeight:'bold'}}>  : {jam} </Text>
-            
-            </View>
+        <View style={{alignItems:'flex-start', flex:1,}}>
+        <View style={[styles.stylebgMetod, stylebg]}>
+        <Text style={{fontSize:12, color:'white', fontWeight:'bold', textAlign:'center'}}>{metodPembayaran}</Text>
+        </View>
+        </View>
         </View>
         
+        <View style={{marginLeft:16, marginRight:16, marginTop:10}}>
+          <Text style={{fontSize:14, fontWeight:'bold', color:colors.btnTextGray }}>Total Pesanan {jumlah} Produk</Text>
+          <Text style={{fontSize:16, fontWeight:'bold', color:'black', marginTop:8 }}>{formatRupiah(total, 'Rp. ')}</Text>
+          <Text style={{fontSize:12, fontWeight:'bold', color:colors.btnTextGray, marginTop:16 }}>{insertAt}</Text>
         </View>
         </TouchableOpacity>
         </View>
@@ -67,7 +60,7 @@ const styles = StyleSheet.create({
     },
     title2:{
       height:48,
-      width:220,
+      width:'70%',
     },
     rating: {
       fontSize: 17,
@@ -79,22 +72,48 @@ const styles = StyleSheet.create({
     },
     CrView:{
         shadowColor: "#000",
-        backgroundColor:'#ffffff',
+        backgroundColor:colors.bglayout,
         marginTop:17,
         shadowOffset: {
             width: 0,
             height: 2,
         },
-        height:139,
-        //width:324,
-        justifyContent:'center',
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        elevation: 5,
-        marginRight:10,
-        marginLeft:10,
+        height:146,
+        flex:1,
+        //width:358,
+        // shadowOpacity: 0.25,
+        // shadowRadius: 3.84,
+        // elevation: 5,
+        marginRight:20,
+        marginLeft:20,
         marginBottom:2,
         marginTop:17,
-        borderRadius:10
+        borderRadius:16
     },
-  });
+    stylebgStatus:{
+      alignItems:'center', 
+      justifyContent:'center', 
+      marginTop:10, 
+      marginBottom:6, 
+      height:26, 
+      marginRight:12, 
+      borderRadius:15, 
+      shadowOpacity: 0.25, 
+      flexDirection:'row',
+      shadowRadius: 3.20,  
+      elevation:3
+    },
+    stylebgMetod:{
+      alignItems:'center', 
+      justifyContent:'center', 
+      marginTop:10, 
+      marginBottom:6, 
+      height:26, 
+      //width:85, 
+      marginRight:12, 
+      borderRadius:15, 
+      shadowOpacity: 0.25, 
+      flexDirection:'row',
+      shadowRadius: 3.20,  
+      elevation:3}
+   });

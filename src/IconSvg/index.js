@@ -20,5 +20,6 @@ import IconRatingToko from './ratingtoko.svg'
 import IconProdukPopuler from './produkpopuler.svg'
 import IconProfile from './ubahprofile.svg'
 import IconExit from './close.svg'
+import IconBackRed from './backred.svg'
 
-export {SvgBeranda, SvgBerandaActive, SvgInfo, SvgInfoActive, PesananBaru, PesananBaruRed, MenungguPesanan, MenungguPesananRed, SiapDikirim, SiapDikirimRed, DalamPengiriman, DalamPengirimanRed, PesananSelesai, PesananSelesaiRed, IconHapus, IconFilter, IconSearch, IconDaftarPesanan, IconRatingToko, IconProdukPopuler, IconProfile, IconExit}
+export {SvgBeranda, SvgBerandaActive, SvgInfo, SvgInfoActive, PesananBaru, PesananBaruRed, MenungguPesanan, MenungguPesananRed, SiapDikirim, SiapDikirimRed, DalamPengiriman, DalamPengirimanRed, PesananSelesai, PesananSelesaiRed, IconHapus, IconFilter, IconSearch, IconDaftarPesanan, IconRatingToko, IconProdukPopuler, IconProfile, IconExit, IconBackRed}

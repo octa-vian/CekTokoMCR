@@ -1,16 +1,16 @@
 import React from 'react';
 import {StyleSheet, Text, View, Image, TouchableOpacity, SafeAreaView, ImageBackground} from 'react-native';
+import { IconBackRed } from '../../IconSvg';
 import {colors} from '../../Utils'
 
 const Header = ({title, onPress, solor, gambar, drawer}) => {
   return (
     <SafeAreaView>
     <View style={styles.page}>
-      <TouchableOpacity onPress ={onPress}>
-      <Image source={require('../../Gambar/back.png')} style={styles.img} /> 
+      <TouchableOpacity style={styles.img} onPress ={onPress}>
+      <IconBackRed/>
       </TouchableOpacity>
       <Text style={styles.title}>{title}</Text>
-
       <TouchableOpacity onPress={drawer} style={{alignItems:'flex-end', justifyContent:'center', height:28, width:28, flex:1, marginRight:30}}>
       <Image style={{height:28, width:28}} source={gambar} />
     </TouchableOpacity>
@@ -41,7 +41,8 @@ const styles = StyleSheet.create({
     alignItems:'center',
     paddingLeft:26,
     flexDirection:'row',
-    backgroundColor: colors.bgPrimary,
+    backgroundColor:'#ffffff',
+    elevation:3
   },
   page2:{
     height:60,
@@ -52,9 +53,9 @@ const styles = StyleSheet.create({
     width:375,
   },
   title: {
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: 'bold',
-    color: 'white',
+    color:'black',
   },
   img:{
     height:14,

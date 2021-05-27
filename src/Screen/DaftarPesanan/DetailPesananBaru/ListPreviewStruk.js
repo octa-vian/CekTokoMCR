@@ -10,25 +10,30 @@ const ListPreviewStruk = ({nama, satuan, status, harga, hargaSatuan}) => {
 
     return (
     
-        <View>
+        
         <View style={styles.page2}>
         <View style={styles.tab1}>
-            <Text style={{fontSize:12,
+          <View style={{flexDirection:'row', alignItems:'center'}}>
+          <Text style={{fontSize:14,
               color:'black',
               fontWeight:'normal',
-              textTransform:'capitalize'}} >{nama}</Text>
-              <Text style={{fontSize:12, color:colors.btnActif, fontStyle:'italic'}}>{formatRupiah(hargaSatuan, 'Rp')}</Text>
+              textTransform:'capitalize', flex:1}}>{nama}</Text>
+          <View style={styles.tab3(status)}>
+            <Text style={{fontSize:12, color:'white', textTransform:'capitalize'}}>{status}</Text>
+          </View>
+          </View>
+          <View style={{flexDirection:'row', marginTop:8}}>
+          <Text style={{fontSize:14, color:'black', fontWeight:'bold'}}>{formatRupiah(hargaSatuan, 'Rp')}</Text>
+          <View style={styles.tab2}>
+            <Text style={{fontSize:14, textAlign:'right', marginRight:16, fontWeight:'bold' }}> {satuan} </Text>
+          </View>
+          </View>
+              
         </View>
-        <View style={styles.tab2}>
-            <Text style={{fontSize:12, }} > {satuan} </Text>
-        </View>
-        <View style={styles.tab3}>
-            <Text style={{fontSize:12, color:colors.btnredcolor, textTransform:'capitalize'}}>{status}</Text>
-        </View>
-        <View style={styles.tab4}>
+        
+        {/* <View style={styles.tab4}>
             <Text style={{fontSize:12, color:'black', textTransform:'capitalize'}}>{formatRupiah(harga, 'Rp')}</Text>
-        </View>
-        </View>
+        </View> */}
         </View>
         
     )
@@ -46,8 +51,9 @@ const styles = StyleSheet.create({
     page2:{
       flexDirection:'row',
       justifyContent:'center',
-      //width:307,
-      paddingTop:4
+      //width:'100%',
+      paddingTop:4,
+      marginBottom:24
       //height:22
     },
     title: {
@@ -73,18 +79,24 @@ const styles = StyleSheet.create({
     },
     tab1:{
       flex:1,
-      marginLeft:10,
+      marginLeft:16,
       
       //alignItems:'center'
   },
   tab2:{
       flex:1,
-      alignItems:'center'
+      alignItems:'flex-end'
   },
-  tab3:{
-    flex:1,
-    alignItems:'flex-start'
-  },
+  tab3:(colorStatus) => ({
+    alignItems:'center',
+    backgroundColor:colorStatus == 'dihapus' ? colors.btnActif:'white',
+    width:'20%',
+    borderRadius:12,
+    marginLeft:10,
+    justifyContent:'center',
+    marginRight:10,
+    height:20
+  }),
   tab4:{
     flex:1,
     alignItems:'flex-end',
