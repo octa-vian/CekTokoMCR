@@ -5,7 +5,7 @@ import Header from '../Header'
 
 const TransaksiBerhasil = ({navigation, route}) => {
     
-    const {pembeli, tanggal, diterima, jenis_pembayaran, totalTagihan, status, kembalian} = route.params;
+    const {pembeli, tanggal, diterima, jenis_pembayaran, totalTagihan, status, kembalian, dataListProduk} = route.params;
 
     function formatRupiah(num, pra) {
         return pra + ' ' + parseFloat(num).toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
@@ -45,7 +45,7 @@ const TransaksiBerhasil = ({navigation, route}) => {
             </ScrollView>
             <View style={{justifyContent:'center', alignItems:'center', marginLeft:18, marginRight:18, paddingBottom:20}}>
                 <View style={{flexDirection:'row', }}>
-                    <TouchableOpacity style={{flex:1, borderColor:colors.btnActif, borderWidth:1, height:42, margin:8, borderRadius:22, alignItems:'center', justifyContent:'center'}}>
+                    <TouchableOpacity style={{flex:1, borderColor:colors.btnActif, borderWidth:1, height:42, margin:8, borderRadius:22, alignItems:'center', justifyContent:'center'}} onPress={() => navigation.navigate('Scann Bluetooth')}>
                     <Text style={{fontSize:14, fontWeight:"bold", color:colors.btnActif}}>Cetak Struk</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={{flex:1, borderColor:colors.btnActif, borderWidth:1, height:42, margin:8, borderRadius:22, alignItems:'center', justifyContent:'center'}}>
@@ -57,6 +57,7 @@ const TransaksiBerhasil = ({navigation, route}) => {
                 </TouchableOpacity>
             </View>
         </View>
+        // onPress={() => navigation.navigate('Scann Bluetooth', {nama_pembeli: pembeli, })}
     )
 }
 

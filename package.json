@@ -29,6 +29,7 @@
     "react-moment": "^1.1.1",
     "react-native": "0.63.4",
     "react-native-animated-splash-screen": "^2.0.5",
+    "react-native-bluetooth-escpos-printer": "0.0.5",
     "react-native-checkbox-form": "^1.1.5",
     "react-native-circle-checkbox": "^0.1.6",
     "react-native-custom-bottom-sheet": "^1.0.4",

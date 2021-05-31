@@ -18,6 +18,7 @@ var status = '';
 var struk = '';
 var dataStruk = '';
 var cat = '';
+var dataProduk = [];
 const CheckOutProduk = ({navigation, route}) => {
 
     const [ListProduk, setListProduk] = useState([]);
@@ -135,8 +136,9 @@ const CheckOutProduk = ({navigation, route}) => {
             if(metadata.status == 200){
             setDataKeranjang(res.response);
             dataStruk = res.response;
+            dataProduk = res.response.order_line;
             //alert(metadata.message + dataKeranjang.catatan_merchant);
-            navigation.navigate('Transaksi Berhasil', {pembeli: dataStruk.pembeli, tanggal: dataStruk.tgl_transaksi, diterima: dataStruk.diterima, jenis_pembayaran: dataStruk.jenis_pembayaran, totalTagihan: dataStruk.total, status: dataStruk.status, kembalian: dataStruk.kembalian})
+            navigation.navigate('Transaksi Berhasil', {pembeli: dataStruk.pembeli, tanggal: dataStruk.tgl_transaksi, diterima: dataStruk.diterima, jenis_pembayaran: dataStruk.jenis_pembayaran, totalTagihan: dataStruk.total, status: dataStruk.status, kembalian: dataStruk.kembalian, dataListProduk: dataProduk})
             }
         })
         .catch((err) => {

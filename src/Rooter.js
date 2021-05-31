@@ -44,6 +44,7 @@ import DaftarProdukKasir from './Screen/Kasir/DaftarProdukKasir';
 import CheckOutProduk from './Screen/Kasir/CheckOutProduk';
 import POS_Tunai from './Screen/Kasir/POS_Tunai';
 import TransaksiBerhasil from './Screen/Kasir/TransaksiBerhasil';
+import ScanBluetooth from './Screen/Kasir/Bluetooth/ScanBluetooth';
 
 
 function HomeScreen() {
@@ -121,6 +122,7 @@ function Rooter() {
         <Stack.Screen name="Checkout Pesanan" component={CheckOutProduk} options={{headerShown:false}} />
         <Stack.Screen name="Pos Tunai" component={POS_Tunai} options={{headerShown:false}} />
         <Stack.Screen name="Transaksi Berhasil" component={TransaksiBerhasil} options={{headerShown:false}} />
+        <Stack.Screen name="Scann Bluetooth" component={ScanBluetooth} options={{headerShown:false}} />
       </Stack.Navigator>
     </NavigationContainer>
   );
